@@ -1,0 +1,126 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.75rem;
+
+  /* SOPRINA BUILDING brand palette — repris du dépliant */
+  --sb-navy: #0d2148;
+  --sb-navy-2: #00234c;
+  --sb-navy-deep: #081226;
+  --sb-navy-deep-2: #0a1a35;
+  --sb-gold: #f0b23e;
+  --sb-body: #2b3648;
+  --sb-grayline: #e4e8ee;
+
+  --background: #ffffff;
+  --foreground: var(--sb-navy);
+  --card: #ffffff;
+  --card-foreground: var(--sb-navy);
+  --popover: #ffffff;
+  --popover-foreground: var(--sb-navy);
+  --primary: var(--sb-navy);
+  --primary-foreground: #ffffff;
+  --secondary: var(--sb-gold);
+  --secondary-foreground: var(--sb-navy);
+  --muted: #f4f6fa;
+  --muted-foreground: var(--sb-body);
+  --accent: var(--sb-gold);
+  --accent-foreground: var(--sb-navy);
+  --destructive: #b3261e;
+  --border: var(--sb-grayline);
+  --input: var(--sb-grayline);
+  --ring: var(--sb-gold);
+}
+
+.dark {
+  --background: var(--sb-navy-deep);
+  --foreground: #ffffff;
+  --card: var(--sb-navy);
+  --card-foreground: #ffffff;
+  --popover: var(--sb-navy);
+  --popover-foreground: #ffffff;
+  --primary: var(--sb-gold);
+  --primary-foreground: var(--sb-navy);
+  --secondary: var(--sb-navy-2);
+  --secondary-foreground: #ffffff;
+  --muted: var(--sb-navy-2);
+  --muted-foreground: #c9d3e3;
+  --accent: var(--sb-gold);
+  --accent-foreground: var(--sb-navy);
+  --destructive: #ff6b60;
+  --border: rgba(255, 255, 255, 0.12);
+  --input: rgba(255, 255, 255, 0.16);
+  --ring: var(--sb-gold);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-sb-navy: var(--sb-navy);
+  --color-sb-navy-2: var(--sb-navy-2);
+  --color-sb-navy-deep: var(--sb-navy-deep);
+  --color-sb-navy-deep-2: var(--sb-navy-deep-2);
+  --color-sb-gold: var(--sb-gold);
+  --color-sb-body: var(--sb-body);
+  --color-sb-grayline: var(--sb-grayline);
+
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Respecte la préférence système "mouvement réduit" : neutralise les
+   animations d'entrée (framer-motion) et les transitions décoratives
+   sans casser la mise en page (pas de display:none). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer utilities {
+  .container-sb {
+    @apply mx-auto w-full max-w-7xl px-6 lg:px-10;
+  }
+  /* Focus visible pour les liens texte / icônes non couverts par le
+     composant Button (nav, footer, liens tel/mailto, "voir plus...").
+     outline (et non ring/box-shadow) : pas besoin d'accorder une couleur
+     d'offset au fond (clair ou sombre), donc réutilisable partout. */
+  .focus-ring {
+    @apply rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sb-gold;
+  }
+}
