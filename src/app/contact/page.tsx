@@ -6,6 +6,7 @@ import { ContactForm } from "@/components/forms/contact-form";
 import { CONTACT } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { WhatsappIcon } from "@/components/site/social-icons";
+import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact — SOPRINA BUILDING",
@@ -32,7 +33,7 @@ export default function ContactPage() {
 
       <section className="bg-white py-20">
         <div className="container-sb grid gap-14 lg:grid-cols-5">
-          <div className="lg:col-span-2">
+          <Reveal direction="left" className="lg:col-span-2">
             <h2 className="text-xl font-bold text-sb-navy">Nos coordonnées</h2>
 
             <div className="mt-6 flex flex-col gap-5">
@@ -105,11 +106,15 @@ export default function ContactPage() {
                 loading="lazy"
               />
             </div>
-          </div>
+          </Reveal>
 
-          <div className="rounded-3xl border border-sb-grayline bg-white p-8 shadow-sm lg:col-span-3">
+          <Reveal
+            direction="right"
+            delay={0.1}
+            className="rounded-3xl border border-sb-grayline bg-white p-8 shadow-sm lg:col-span-3"
+          >
             <ContactForm />
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

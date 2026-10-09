@@ -49,7 +49,7 @@ export function SiteHeader() {
             {CONTACT.phones[0]}
           </a>
           <Button asChild size="sm">
-            <Link href="/contact">Demander un devis</Link>
+            <Link href="/devis">Demander un devis</Link>
           </Button>
         </div>
 
@@ -94,7 +94,7 @@ export function SiteHeader() {
               </a>
               <SheetClose asChild>
                 <Button asChild>
-                  <Link href="/contact">Demander un devis</Link>
+                  <Link href="/devis">Demander un devis</Link>
                 </Button>
               </SheetClose>
             </div>

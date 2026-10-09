@@ -5,6 +5,7 @@ import { PageHero } from "@/components/sections/page-hero";
 import { Cta } from "@/components/sections/cta";
 import { METHOD_STEPS, ENGAGEMENTS, WHY_US } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
+import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = pageMetadata({
   title: "Notre méthode de travail — SOPRINA BUILDING",
@@ -25,7 +26,7 @@ export default function MethodePage() {
         <div className="container-sb">
           <div className="relative flex flex-col gap-10 lg:flex-row lg:gap-6">
             {METHOD_STEPS.map((step, i) => (
-              <div key={step.n} className="relative flex-1">
+              <Reveal key={step.n} delay={i * 0.1} className="relative flex-1">
                 <div className="flex items-center gap-4 lg:flex-col lg:items-start lg:gap-0">
                   <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-sb-navy text-lg font-bold text-sb-gold">
                     {step.n}
@@ -42,7 +43,7 @@ export default function MethodePage() {
                 {i < METHOD_STEPS.length - 1 && (
                   <span className="absolute top-7 left-14 hidden h-px w-full bg-sb-grayline lg:block" />
                 )}
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -50,27 +51,32 @@ export default function MethodePage() {
 
       <section className="bg-muted py-24">
         <div className="container-sb grid gap-14 lg:grid-cols-2 lg:items-center">
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl">
+          <Reveal
+            direction="left"
+            className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl"
+          >
             <Image
               src="/images/p15_photo.jpg"
               alt="L'équipe SOPRINA BUILDING"
               fill
               className="object-cover"
             />
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal direction="right" delay={0.1}>
             <span className="mb-4 inline-block rounded-full bg-sb-gold/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-sb-navy">
               Nos engagements
             </span>
             <div className="grid grid-cols-2 gap-4">
-              {ENGAGEMENTS.map((e) => (
-                <div key={e.n} className="rounded-2xl bg-sb-navy p-6 text-white">
-                  <span className="text-sm font-semibold text-sb-gold">
-                    {e.n}
-                  </span>
-                  <p className="mt-2 text-xl font-bold">{e.title}</p>
-                </div>
+              {ENGAGEMENTS.map((e, i) => (
+                <Reveal key={e.n} delay={0.15 + i * 0.07} amount={0.4}>
+                  <div className="rounded-2xl bg-sb-navy p-6 text-white transition-all hover:-translate-y-1 hover:shadow-lg">
+                    <span className="text-sm font-semibold text-sb-gold">
+                      {e.n}
+                    </span>
+                    <p className="mt-2 text-xl font-bold">{e.title}</p>
+                  </div>
+                </Reveal>
               ))}
             </div>
 
@@ -84,7 +90,7 @@ export default function MethodePage() {
                 </span>
               ))}
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 

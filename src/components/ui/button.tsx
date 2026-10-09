@@ -10,9 +10,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-sb-gold text-sb-navy shadow-md hover:shadow-lg hover:brightness-105 active:scale-[0.98]",
+          "bg-sb-gold text-sb-navy shadow-md hover:shadow-lg hover:brightness-105 hover:scale-[1.04] active:scale-[0.97]",
         primary:
-          "bg-sb-navy text-white shadow-md hover:bg-sb-navy-2 active:scale-[0.98]",
+          "bg-sb-navy text-white shadow-md hover:bg-sb-navy-2 hover:scale-[1.04] active:scale-[0.97]",
         outline:
           "border border-white/30 text-white hover:bg-white/10 active:scale-[0.98]",
         ghost: "hover:bg-muted hover:text-foreground",

@@ -220,3 +220,30 @@ export const AMBITION = {
   title: "Notre ambition",
   text: "Être le partenaire de référence en Afrique centrale pour des solutions complètes et intégrées dans le bâtiment, l'ingénierie et la gestion technique.",
 } as const;
+
+// --- FAQ page "Devis" ---
+// Statut : IMPLEMENTED. Chaque réponse s'appuie uniquement sur des
+// informations déjà présentes ailleurs sur le site (domaines, méthode,
+// adresse, canaux de contact) — aucun chiffre ni délai n'est inventé.
+export const FAQ_ITEMS = [
+  {
+    q: "Comment obtenir un devis ?",
+    a: "Décrivez votre projet dans le formulaire ci-dessous, ou contactez-nous directement par téléphone, WhatsApp ou e-mail. Nous revenons vers vous pour échanger sur votre besoin avant de vous proposer une solution adaptée.",
+  },
+  {
+    q: "Quelles informations dois-je préparer ?",
+    a: "Le type de travaux envisagés, la localisation du site et, si possible, des plans ou photos existants. Cela nous permet d'analyser le site et les exigences techniques avec plus de précision dès l'étape \"Étudier\" de notre méthode.",
+  },
+  {
+    q: "Quels types de projets prenez-vous en charge ?",
+    a: "Construction & génie civil, aménagement & rénovation, électricité & énergie, smart building & sécurité, climatisation & froid, maintenance & facility solutions, ainsi que la fourniture de matériaux et équipements — pour les entreprises, banques, hôtels, industries, écoles, administrations et plusieurs autres secteurs.",
+  },
+  {
+    q: "Où intervenez-vous ?",
+    a: "Nous sommes basés à Douala – Bonanjo, près de Kenya Airways. Contactez-nous avec la localisation de votre projet pour confirmer notre couverture.",
+  },
+  {
+    q: "Comment se déroule un projet avec SOPRINA BUILDING ?",
+    a: "Notre méthode suit 5 étapes claires : écouter vos besoins, étudier le site et les plans, proposer une solution adaptée, réaliser les travaux avec rigueur, puis contrôler la qualité et la conformité.",
+  },
+] as const;
