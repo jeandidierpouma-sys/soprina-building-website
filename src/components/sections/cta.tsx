@@ -29,7 +29,7 @@ export function Cta() {
 
           <div className="mt-8 flex flex-wrap gap-4">
             <Button asChild size="lg">
-              <Link href="/contact">Contactez-nous pour votre projet</Link>
+              <Link href="/devis">Demander un devis</Link>
             </Button>
           </div>
 

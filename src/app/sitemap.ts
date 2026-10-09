@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/secteurs", priority: 0.7, changeFrequency: "yearly" as const },
     { path: "/methode", priority: 0.6, changeFrequency: "yearly" as const },
     { path: "/contact", priority: 0.8, changeFrequency: "yearly" as const },
+    { path: "/devis", priority: 0.9, changeFrequency: "monthly" as const },
   ];
 
   const now = new Date();
