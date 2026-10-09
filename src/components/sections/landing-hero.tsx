@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { MapPin, Layers, MessageCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,28 @@ const TRUST = [
 ];
 
 export function LandingHero() {
+  const shouldReduceMotion = useReducedMotion();
+
+  // Le bloc d'accroche apparaît en cascade (eyebrow → titre → texte → CTA →
+  // réassurance) plutôt que d'un seul bloc : chaque enfant hérite du stagger
+  // du parent via `variants`, sans dupliquer les transitions partout.
+  const container: Variants = {
+    hidden: {},
+    show: {
+      transition: shouldReduceMotion
+        ? {}
+        : { staggerChildren: 0.12, delayChildren: 0.1 },
+    },
+  };
+  const item: Variants = {
+    hidden: shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: shouldReduceMotion ? 0 : 0.6, ease: "easeOut" },
+    },
+  };
+
   return (
     <section className="relative isolate flex min-h-[86vh] items-center overflow-hidden bg-sb-navy-deep">
       <Image
@@ -39,30 +61,42 @@ export function LandingHero() {
 
       <div className="container-sb relative z-10 py-28">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          initial="hidden"
+          animate="show"
+          variants={container}
           className="max-w-xl"
         >
-          <span className="text-sm font-semibold uppercase tracking-wide text-sb-gold">
+          <motion.span
+            variants={item}
+            className="text-sm font-semibold uppercase tracking-wide text-sb-gold"
+          >
             Demande de devis
-          </span>
-          <h1 className="mt-3 text-4xl font-bold leading-[1.1] text-white sm:text-5xl">
+          </motion.span>
+          <motion.h1
+            variants={item}
+            className="mt-3 text-4xl font-bold leading-[1.1] text-white sm:text-5xl"
+          >
             Parlez-nous de votre projet, recevons une solution adaptée
-          </h1>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/75">
+          </motion.h1>
+          <motion.p
+            variants={item}
+            className="mt-6 max-w-lg text-lg leading-relaxed text-white/75"
+          >
             SOPRINA BUILDING accompagne ses clients de la conception à la
             livraison — construction, ingénierie, aménagement, installations
             techniques et maintenance.
-          </p>
+          </motion.p>
 
-          <div className="mt-10">
+          <motion.div variants={item} className="mt-10">
             <Button asChild size="lg">
               <a href="#devis-form">Demander mon devis</a>
             </Button>
-          </div>
+          </motion.div>
 
-          <div className="mt-16 grid max-w-lg grid-cols-1 gap-6 border-t border-white/10 pt-8 sm:grid-cols-3">
+          <motion.div
+            variants={item}
+            className="mt-16 grid max-w-lg grid-cols-1 gap-6 border-t border-white/10 pt-8 sm:grid-cols-3"
+          >
             {TRUST.map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-start gap-3">
                 <Icon className="mt-0.5 size-5 shrink-0 text-sb-gold" />
@@ -72,7 +106,7 @@ export function LandingHero() {
                 </div>
               </div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

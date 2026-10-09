@@ -27,7 +27,7 @@ export function DomainsPreview() {
           {DOMAINS.map((d) => (
             <div
               key={d.n}
-              className={`group overflow-hidden rounded-2xl border border-sb-grayline bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl ${
+              className={`group overflow-hidden rounded-2xl border border-sb-grayline bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-sb-gold/40 hover:shadow-xl ${
                 d.n === "07" ? "sm:col-span-2" : ""
               }`}
             >
