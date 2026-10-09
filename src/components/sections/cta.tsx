@@ -4,6 +4,7 @@ import { Mail, Phone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CONTACT } from "@/lib/content";
+import { Reveal } from "@/components/motion/reveal";
 
 export function Cta() {
   return (
@@ -17,7 +18,7 @@ export function Cta() {
       <div className="absolute inset-0 bg-gradient-to-r from-sb-navy-deep-2 via-sb-navy-deep-2/90 to-transparent" />
 
       <div className="container-sb relative z-10">
-        <div className="max-w-xl">
+        <Reveal className="max-w-xl">
           <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
             Votre projet mérite un partenaire à la hauteur
           </h2>
@@ -49,7 +50,7 @@ export function Cta() {
               {CONTACT.email}
             </a>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

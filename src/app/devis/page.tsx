@@ -10,6 +10,7 @@ import { Faq } from "@/components/sections/faq";
 import { ContactForm } from "@/components/forms/contact-form";
 import { CONTACT } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
+import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = pageMetadata({
   title: "Demandez votre devis — SOPRINA BUILDING",
@@ -30,7 +31,7 @@ export default function DevisPage() {
 
       <section id="devis-form" className="bg-white py-24">
         <div className="container-sb grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
-          <div>
+          <Reveal direction="left">
             <h2 className="text-3xl font-bold text-sb-navy sm:text-4xl">
               Décrivez votre projet
             </h2>
@@ -76,11 +77,15 @@ export default function DevisPage() {
                 {CONTACT.address}
               </div>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="rounded-2xl border border-sb-grayline bg-muted p-6 sm:p-8">
+          <Reveal
+            direction="right"
+            delay={0.1}
+            className="rounded-2xl border border-sb-grayline bg-muted p-6 sm:p-8"
+          >
             <ContactForm />
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

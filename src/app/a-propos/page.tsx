@@ -6,6 +6,7 @@ import { WhyUs } from "@/components/sections/why-us";
 import { Cta } from "@/components/sections/cta";
 import { ABOUT_INTRO, AMBITION } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
+import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = pageMetadata({
   title: "Qui sommes-nous — SOPRINA BUILDING",
@@ -25,7 +26,7 @@ export default function AProposPage() {
 
       <section className="bg-white py-24">
         <div className="container-sb grid gap-14 lg:grid-cols-2 lg:items-center">
-          <div className="order-2 lg:order-1">
+          <Reveal direction="left" className="order-2 lg:order-1">
             <div className="flex flex-col gap-5 text-sb-body">
               {ABOUT_INTRO.paragraphs.map((p) => (
                 <p key={p} className="leading-relaxed">
@@ -49,9 +50,9 @@ export default function AProposPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </Reveal>
 
-          <div className="order-1 lg:order-2">
+          <Reveal direction="right" delay={0.1} className="order-1 lg:order-2">
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl">
               <Image
                 src="/images/p14_photo.jpg"
@@ -60,22 +61,25 @@ export default function AProposPage() {
                 className="object-cover"
               />
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="bg-muted py-24">
         <div className="container-sb grid gap-14 lg:grid-cols-2 lg:items-center">
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl shadow-xl">
+          <Reveal
+            direction="left"
+            className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl shadow-xl"
+          >
             <Image
               src="/images/p3_photo_clean.jpg"
               alt="Hall d'accueil — standing SOPRINA BUILDING"
               fill
               className="object-cover"
             />
-          </div>
+          </Reveal>
 
-          <div className="flex flex-col gap-8">
+          <Reveal direction="right" delay={0.1} className="flex flex-col gap-8">
             <div>
               <span className="mb-4 inline-block rounded-full bg-sb-gold/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-sb-navy">
                 {AMBITION.title}
@@ -93,7 +97,7 @@ export default function AProposPage() {
                 className="object-cover"
               />
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 

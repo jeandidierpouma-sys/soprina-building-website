@@ -7,6 +7,7 @@ import { Cta } from "@/components/sections/cta";
 import { Button } from "@/components/ui/button";
 import { DOMAINS } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
+import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = pageMetadata({
   title: "Nos domaines d'expertise — SOPRINA BUILDING",
@@ -32,7 +33,8 @@ export default function DomainesPage() {
               id={`domaine-${d.n}`}
               className="grid scroll-mt-24 gap-10 lg:grid-cols-2 lg:items-center lg:gap-16"
             >
-              <div
+              <Reveal
+                direction={i % 2 === 1 ? "right" : "left"}
                 className={`relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-lg ${
                   i % 2 === 1 ? "lg:order-2" : ""
                 }`}
@@ -43,9 +45,13 @@ export default function DomainesPage() {
                   fill
                   className="object-cover"
                 />
-              </div>
+              </Reveal>
 
-              <div className={i % 2 === 1 ? "lg:order-1" : ""}>
+              <Reveal
+                direction={i % 2 === 1 ? "left" : "right"}
+                delay={0.1}
+                className={i % 2 === 1 ? "lg:order-1" : ""}
+              >
                 <div className="mb-4 flex items-center gap-3">
                   <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-sb-navy text-sm font-bold text-sb-gold">
                     {d.n}
@@ -67,7 +73,7 @@ export default function DomainesPage() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </Reveal>
             </div>
           ))}
         </div>
