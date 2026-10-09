@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "@fontsource/poppins/400.css";
 import "@fontsource/poppins/500.css";
 import "@fontsource/poppins/600.css";
@@ -10,11 +11,12 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { MotionProvider } from "@/components/site/motion-provider";
 import { CONTACT, SOCIALS } from "@/lib/content";
 
-// NOTE : nom de domaine PLACEHOLDER (STUB) — aucun domaine n'a encore été
-// acheté (voir étude de faisabilité, section coûts/domaine). À remplacer
-// par le domaine réel dès son acquisition ; d'ici là, metadataBase sert
-// uniquement à générer des URLs absolues valides pour Open Graph/Twitter.
-const SITE_URL = "https://www.soprinabuilding.cm";
+// Domaine réel SOPRINA BUILDING, acheté et connecté sur Vercel (DNS LWS).
+// Anciennement un stub .cm (placeholder avant achat) — corrigé le 2026-10-09
+// (audit post-mise en ligne, point 11/20) : toutes les URLs absolues
+// (metadataBase, Open Graph, Twitter, JSON-LD) utilisaient encore le mauvais
+// domaine, cassant les aperçus de partage, robots.txt et sitemap.xml.
+const SITE_URL = "https://www.soprinabuilding.com";
 const SITE_NAME = "SOPRINA BUILDING";
 const SITE_TITLE =
   "SOPRINA BUILDING — Construction, ingénierie & facility solutions";
@@ -63,6 +65,13 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
+  // Point 19 (Search Console) : prêt à recevoir le code de vérification
+  // "balise HTML" fourni par Google une fois la propriété ajoutée sur
+  // search.google.com/search-console — variable GOOGLE_SITE_VERIFICATION
+  // dans Vercel. Tant qu'elle est absente, aucune balise n'est émise.
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 // Données structurées JSON-LD (schema.org GeneralContractor / LocalBusiness).
@@ -91,6 +100,14 @@ const jsonLd = {
   sameAs: SOCIALS.map((s) => s.href),
 } as const;
 
+// Statut : IMPLEMENTED côté code, CONTRACT_ONLY tant que NEXT_PUBLIC_GA_ID
+// n'est pas défini dans les variables d'environnement Vercel (corrige
+// point 18 de l'audit post-mise en ligne du 2026-10-09). Pour activer :
+// Project Settings → Environment Variables → NEXT_PUBLIC_GA_ID = G-XXXXXXX
+// (identifiant de mesure GA4), puis redéployer. Sans cette variable, le
+// composant ne s'affiche pas et n'alourdit pas le site inutilement.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className="h-full antialiased">
@@ -104,6 +121,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <main className="flex-1">{children}</main>
           <SiteFooter />
         </MotionProvider>
+        {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       </body>
     </html>
   );

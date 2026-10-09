@@ -25,18 +25,20 @@ const EMPTY: FormState = {
   message: "",
 };
 
-// NOTE D'IMPLÉMENTATION (statut : STUB côté envoi réel)
-// Ce formulaire valide les champs côté client et compose un e-mail via
-// mailto: vers info.soprinabuilding@gmail.com — ça fonctionne sans aucun
-// service tiers, mais ça ouvre le client mail du visiteur (pas d'envoi
-// silencieux). Pour un envoi silencieux depuis le serveur, il faudra
-// brancher une route API (/api/contact) sur un service comme Resend ou
-// SMTP — non fait ici faute d'identifiants ; le champ reste STUB tant
-// que ce n'est pas câblé.
+// NOTE D'IMPLÉMENTATION (statut : IMPLEMENTED, envoi réel CONTRACT_ONLY
+// tant que RESEND_API_KEY n'est pas configurée côté serveur — corrige
+// point 08 de l'audit post-mise en ligne du 2026-10-09)
+// Ce formulaire tente d'abord un envoi silencieux via la route serveur
+// /api/contact (Resend). Si cette route répond une erreur — notamment
+// 503 quand RESEND_API_KEY est absente côté serveur, ou en cas de panne
+// réseau — le formulaire bascule automatiquement sur l'ancien
+// comportement mailto: (ouverture du client mail du visiteur), qui reste
+// donc le filet de sécurité, jamais un chemin mort.
 export function ContactForm() {
   const [values, setValues] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [sentVia, setSentVia] = useState<"api" | "mailto">("mailto");
 
   function validate(v: FormState) {
     const next: Partial<FormState> = {};
@@ -50,14 +52,7 @@ export function ContactForm() {
     return next;
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const nextErrors = validate(values);
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
-
-    setStatus("sending");
-
+  function openMailtoFallback() {
     const body = [
       `Nom : ${values.name}`,
       `E-mail : ${values.email}`,
@@ -73,7 +68,34 @@ export function ContactForm() {
     )}&body=${encodeURIComponent(body)}`;
 
     window.location.href = mailto;
-    window.setTimeout(() => setStatus("sent"), 600);
+    setSentVia("mailto");
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const nextErrors = validate(values);
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setStatus("sending");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      if (!res.ok) throw new Error("api-error");
+
+      setSentVia("api");
+      setStatus("sent");
+    } catch {
+      // Route non configurée (503) ou panne réseau : on ne bloque jamais
+      // le visiteur — bascule immédiate sur mailto:.
+      openMailtoFallback();
+      window.setTimeout(() => setStatus("sent"), 600);
+    }
   }
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -86,13 +108,22 @@ export function ContactForm() {
       <div className="flex flex-col items-center gap-3 rounded-2xl border border-sb-grayline bg-muted p-10 text-center">
         <CheckCircle2 className="size-10 text-sb-gold" />
         <p className="text-lg font-semibold text-sb-navy">
-          Votre client mail s&apos;est ouvert avec votre message pré-rempli.
+          {sentVia === "api"
+            ? "Votre message a bien été envoyé."
+            : "Votre client mail s'est ouvert avec votre message pré-rempli."}
         </p>
         <p className="max-w-sm text-sm text-sb-body">
-          Il ne reste qu&apos;à cliquer sur envoyer. Vous pouvez aussi nous
-          joindre directement par téléphone.
+          {sentVia === "api"
+            ? "Nous revenons vers vous rapidement. Vous pouvez aussi nous joindre directement par téléphone."
+            : "Il ne reste qu'à cliquer sur envoyer. Vous pouvez aussi nous joindre directement par téléphone."}
         </p>
-        <Button variant="ghost" onClick={() => setStatus("idle")}>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setStatus("idle");
+            setValues(EMPTY);
+          }}
+        >
           Envoyer un autre message
         </Button>
       </div>

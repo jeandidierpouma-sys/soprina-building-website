@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://www.soprinabuilding.cm"; // STUB — cf. layout.tsx
+const SITE_URL = "https://www.soprinabuilding.com"; // cf. layout.tsx
 
 export default function robots(): MetadataRoute.Robots {
   return {

@@ -92,6 +92,19 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+html,
+body {
+  /* Corrige un débordement horizontal réel sur mobile (point 16 de l'audit
+     post-mise en ligne du 2026-10-09, confirmé à 375px : scrollWidth 422px
+     contre clientWidth 375px). Cause : les animations d'entrée Reveal
+     (direction="left"/"right") décalent temporairement leur contenu de
+     ±48px hors écran avant l'apparition — sans garde-fou, ce décalage
+     élargit la largeur de scroll de la page entière. overflow-x:hidden
+     neutralise ce débordement sans casser position:sticky/fixed (header
+     sticky, boutons) : seul le défilement HORIZONTAL est bloqué. */
+  overflow-x: hidden;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

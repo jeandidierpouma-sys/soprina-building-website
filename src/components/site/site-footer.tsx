@@ -89,6 +89,14 @@ export function SiteFooter() {
 
       <div className="container-sb flex flex-col items-center justify-between gap-3 py-6 text-xs text-white/55 sm:flex-row">
         <span>© {new Date().getFullYear()} SOPRINA BUILDING. Tous droits réservés.</span>
+        <div className="flex items-center gap-4">
+          <Link href="/mentions-legales" className="focus-ring hover:text-sb-gold">
+            Mentions légales
+          </Link>
+          <Link href="/confidentialite" className="focus-ring hover:text-sb-gold">
+            Confidentialité
+          </Link>
+        </div>
         <span>Douala – Bonanjo, Cameroun</span>
       </div>
     </footer>
