@@ -18,6 +18,9 @@ export function MethodPreview() {
   });
   const rawScaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const scaleX = shouldReduceMotion ? 1 : rawScaleX;
+  // Point lumineux qui voyage le long de la barre — rend la progression
+  // beaucoup plus visible qu'un simple remplissage.
+  const dotLeft = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
     <section className="bg-muted py-24">
@@ -29,18 +32,26 @@ export function MethodPreview() {
         </div>
 
         <div ref={trackRef}>
-          <div className="relative mb-10 hidden h-1 overflow-hidden rounded-full bg-sb-grayline lg:block">
-            <motion.div
-              style={{ scaleX }}
-              className="h-full w-full origin-left rounded-full bg-sb-gold"
-            />
+          <div className="relative mb-12 hidden h-1.5 lg:block">
+            <div className="absolute inset-0 overflow-hidden rounded-full bg-sb-grayline">
+              <motion.div
+                style={{ scaleX }}
+                className="h-full w-full origin-left rounded-full bg-sb-gold"
+              />
+            </div>
+            {!shouldReduceMotion && (
+              <motion.div
+                style={{ left: dotLeft }}
+                className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sb-gold shadow-[0_0_14px_3px_rgba(240,178,62,0.75)]"
+              />
+            )}
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
             {METHOD_STEPS.map((step, i) => (
               <div
                 key={step.n}
-                className="relative rounded-2xl border border-transparent bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-sb-gold/30 hover:shadow-md"
+                className="relative rounded-2xl border border-transparent bg-white p-6 shadow-sm transition-all hover:-translate-y-1.5 hover:scale-[1.02] hover:border-sb-gold/30 hover:shadow-md"
               >
                 <span className="text-4xl font-extrabold text-sb-gold/25">
                   {step.n}

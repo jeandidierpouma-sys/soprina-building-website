@@ -27,16 +27,16 @@ export function DomainsPreview() {
           {DOMAINS.map((d) => (
             <div
               key={d.n}
-              className={`group overflow-hidden rounded-2xl border border-sb-grayline bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-sb-gold/40 hover:shadow-xl ${
+              className={`group overflow-hidden rounded-2xl border border-sb-grayline bg-white shadow-sm transition-all hover:-translate-y-1.5 hover:border-sb-gold/40 hover:shadow-xl ${
                 d.n === "07" ? "sm:col-span-2" : ""
               }`}
             >
-              <div className="relative aspect-[558/533] w-full bg-white sm:aspect-auto sm:h-[210px]">
+              <div className="relative aspect-[558/533] w-full overflow-hidden bg-white sm:aspect-auto sm:h-[210px]">
                 <Image
                   src={d.icon}
                   alt={d.title}
                   fill
-                  className="object-contain p-2"
+                  className="object-contain p-2 transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
               <div className="p-5">
