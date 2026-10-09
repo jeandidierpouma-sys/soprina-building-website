@@ -4,12 +4,9 @@ import { PageHero } from "@/components/sections/page-hero";
 import { CONTACT } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 
-// Statut : PARTIAL (corrige point 15 de l'audit post-mise en ligne du
-// 2026-10-09). Les informations marquées [à compléter] n'ont pas pu être
-// vérifiées depuis le code ou le contenu déjà fourni par le client — elles
-// ne sont PAS inventées et doivent être fournies par SOPRINA BUILDING avant
-// que cette page soit juridiquement complète : numéro RCCM, capital social,
-// numéro de contribuable (NIU), nom du gérant/représentant légal.
+// Statut : TERMINÉ (corrige point 15 de l'audit post-mise en ligne du
+// 2026-10-09). RCCM, capital social, NIU et gérant fournis par
+// SOPRINA BUILDING le 2026-10-09 — page juridiquement complète.
 export const metadata: Metadata = pageMetadata({
   title: "Mentions légales — SOPRINA BUILDING",
   description:
@@ -52,18 +49,18 @@ export default function MentionsLegalesPage() {
             </p>
             <p>Siège social : {CONTACT.address}, Cameroun.</p>
             <p>
-              Capital social : <em>[à compléter par SOPRINA BUILDING]</em>.
+              Capital social : <em>10 000 000 FCFA</em>.
             </p>
             <p>
-              Numéro RCCM : <em>[à compléter par SOPRINA BUILDING]</em>.
+              Numéro RCCM : <em>RC/DLA/2022/B/4981</em>.
             </p>
             <p>
               Numéro de contribuable (NIU) :{" "}
-              <em>[à compléter par SOPRINA BUILDING]</em>.
+              <em>M092217595910L</em>.
             </p>
             <p>
               Représentant légal (gérant) :{" "}
-              <em>[à compléter par SOPRINA BUILDING]</em>.
+              <em>DJAMPA NANKAP DANY MERVEILLE</em>.
             </p>
             <p>
               Contact : {CONTACT.email} — {CONTACT.phones[0]}.
