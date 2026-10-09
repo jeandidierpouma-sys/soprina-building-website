@@ -185,7 +185,7 @@ export const WHY_US = [
 export const CONTACT = {
   address: "Douala – Bonanjo, situé près de Kenya Airways",
   phones: ["+237 690 140 170", "+237 641 240 115", "+237 677 596 444"],
-  email: "info.soprinabuilding@gmail.com",
+  email: "contact@soprinabuilding.com",
   whatsapp: "https://wa.me/237677596444",
 } as const;
 
