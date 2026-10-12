@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "@fontsource/poppins/400.css";
 import "@fontsource/poppins/500.css";
@@ -8,6 +9,7 @@ import "@fontsource/poppins/800.css";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { WhatsappWidget } from "@/components/site/whatsapp-widget";
 import { MotionProvider } from "@/components/site/motion-provider";
 import { CONTACT, SOCIALS } from "@/lib/content";
 
@@ -19,7 +21,7 @@ import { CONTACT, SOCIALS } from "@/lib/content";
 const SITE_URL = "https://www.soprinabuilding.com";
 const SITE_NAME = "SOPRINA BUILDING";
 const SITE_TITLE =
-  "SOPRINA BUILDING — Construction, ingénierie & facility solutions";
+  "SOPRINA BUILDING — Construction, ingénierie & facility solutions à Douala";
 const SITE_DESCRIPTION =
   "SOPRINA BUILDING accompagne ses clients dans la réalisation de projets de construction performants, de la conception à la livraison — Douala, Cameroun.";
 
@@ -85,7 +87,9 @@ const jsonLd = {
   name: SITE_NAME,
   description: SITE_DESCRIPTION,
   url: SITE_URL,
-  logo: `${SITE_URL}/images/p1_logo.png`,
+  // Logo officiel fourni par le client (2026-10-11), mark seul sur fond
+  // carré marine — format conventionnel pour Organization.logo en JSON-LD.
+  logo: `${SITE_URL}/images/brand/logo-mark-navy-square.png`,
   image: `${SITE_URL}/images/p1_hero_top.jpg`,
   email: CONTACT.email,
   telephone: CONTACT.phones[0],
@@ -108,18 +112,38 @@ const jsonLd = {
 // composant ne s'affiche pas et n'alourdit pas le site inutilement.
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Langue posée par src/middleware.ts (header x-locale, pas de réécriture
+  // d'URL) : /en/... garde son lang="en" réel, /... garde lang="fr".
+  const headerList = await headers();
+  const locale = headerList.get("x-locale") === "en" ? "en" : "fr";
+  // /studio (Sanity Studio embarqué, ajouté le 2026-10-10) : pas de header,
+  // footer ni widget WhatsApp commercial — le Studio a besoin de tout le
+  // viewport. Voir middleware.ts pour la pose du header x-is-studio.
+  const isStudio = headerList.get("x-is-studio") === "1";
+
+  if (isStudio) {
+    return (
+      <html lang="fr" className="h-full antialiased">
+        <body className="min-h-full bg-background text-foreground">
+          {children}
+        </body>
+      </html>
+    );
+  }
+
   return (
-    <html lang="fr" className="h-full antialiased">
+    <html lang={locale} className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <MotionProvider>
-          <SiteHeader />
+          <SiteHeader locale={locale} />
           <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <SiteFooter locale={locale} />
+          <WhatsappWidget />
         </MotionProvider>
         {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
       </body>

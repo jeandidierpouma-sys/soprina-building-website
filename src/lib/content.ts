@@ -1,13 +1,88 @@
 // Contenu repris tel quel du dépliant SOPRINA BUILDING (pdftotext -layout)
 // — même texte, aucune reformulation, seulement structuré pour le web.
 
+// "Actualités" ajouté le 2026-10-10 avec le CMS Sanity (Lot 3) — géré par
+// SiteHeader/SiteFooter comme les autres entrées, aucun code supplémentaire.
 export const NAV_LINKS = [
   { href: "/", label: "Accueil" },
   { href: "/a-propos", label: "Qui sommes-nous" },
   { href: "/domaines", label: "Domaines d'expertise" },
+  { href: "/realisations", label: "Réalisations" },
+  { href: "/actualites", label: "Actualités" },
   { href: "/secteurs", label: "Secteurs" },
   { href: "/methode", label: "Notre méthode" },
   { href: "/contact", label: "Contact" },
+] as const;
+
+// --- Galerie "Réalisations" ---
+// Statut : PARTIAL. Chantiers réels (confirmé par le client le 2026-10-10),
+// pas des visuels stock. Champs volontairement absents (lieu précis,
+// surface, délais, budget) : non fournis/non validés à ce stade — à
+// compléter projet par projet plutôt qu'à inventer.
+// Images : fichiers HD fournis par le client le 2026-10-10 (≈1600×660px),
+// remplacent le recadrage basse résolution utilisé en premier jet depuis
+// le flyer marketing. Mêmes noms de fichiers (projet-0X-...), donc aucun
+// changement de structure nécessaire ailleurs dans le code.
+//
+// Vidéo (ajoutée le 2026-10-12, MISSING tant qu'aucun fichier/lien n'est
+// fourni) : deux champs optionnels, un seul doit être rempli par projet.
+// - `video` : chemin local vers un clip auto-hébergé, ex.
+//   "/videos/projet-01-villa-contemporaine.mp4". Réservé aux clips COURTS
+//   et COMPRESSÉS (≲20-30 Mo, h264/mp4) — un fichier plus lourd alourdit le
+//   dépôt git et la bande passante Vercel. Le fichier doit être déposé
+//   directement dans public/videos/ (jamais envoyé via patch git : les
+//   patches ne sont pas faits pour du binaire volumineux).
+// - `videoUrl` : identifiant de vidéo YouTube (ex. "dQw4w9WgXcQ", pas l'URL
+//   complète) pour un clip plus long — nécessite une chaîne YouTube pour
+//   l'entreprise. Chargée en lazy (facade cliquable), jamais au chargement
+//   de la page.
+// Si les deux sont absents (`undefined`), la carte affiche la photo
+// principale comme avant — aucune régression pour les projets sans vidéo.
+//
+// Galerie défilante (ajoutée le 2026-10-12) : `gallery` est un tableau
+// optionnel de photos supplémentaires (chemins locaux), affichées à la
+// suite de la photo principale dans une bande qui défile horizontalement
+// (swipe mobile, flèches au survol sur desktop). La vidéo, si présente,
+// vient toujours en dernier dans la bande. Avec un seul média (cas actuel
+// des 4 projets ci-dessous), aucune flèche ni défilement n'apparaît —
+// rendu identique à avant.
+export const REALISATIONS = [
+  {
+    slug: "villa-contemporaine",
+    title: "Villa contemporaine",
+    category: "Construction & Génie Civil",
+    img: "/images/realisations/projet-01-villa-contemporaine.jpg",
+    gallery: undefined as string[] | undefined,
+    video: undefined as string | undefined,
+    videoUrl: undefined as string | undefined,
+  },
+  {
+    slug: "amenagement-cuisine",
+    title: "Aménagement intérieur — cuisine & séjour",
+    category: "Aménagement & Rénovation",
+    img: "/images/realisations/projet-02-amenagement-cuisine.jpg",
+    gallery: undefined as string[] | undefined,
+    video: undefined as string | undefined,
+    videoUrl: undefined as string | undefined,
+  },
+  {
+    slug: "villa-piscine",
+    title: "Villa avec piscine",
+    category: "Construction & Génie Civil",
+    img: "/images/realisations/projet-03-villa-piscine.jpg",
+    gallery: undefined as string[] | undefined,
+    video: undefined as string | undefined,
+    videoUrl: undefined as string | undefined,
+  },
+  {
+    slug: "chantier-genie-civil",
+    title: "Chantier en cours",
+    category: "Construction & Génie Civil",
+    img: "/images/realisations/projet-04-chantier-genie-civil.jpg",
+    gallery: undefined as string[] | undefined,
+    video: undefined as string | undefined,
+    videoUrl: undefined as string | undefined,
+  },
 ] as const;
 
 export const DOMAINS = [
@@ -127,6 +202,28 @@ export const DOMAINS = [
   },
 ] as const;
 
+// --- Bloc "Notre approvisionnement international" (page 12 du catalogue) ---
+// Statut : NOUVEAU — absent du premier catalogue fourni, présent dans la
+// version la plus récente (audit du 2026-10-10). Rattaché au domaine 07
+// (Fourniture de matériaux et équipements professionnels). Visuel existant
+// (p12_photo.jpg) déjà présent dans /public/images mais jamais utilisé
+// jusqu'ici dans le code.
+export const SUPPLY_CHAIN = {
+  title: "Notre approvisionnement international",
+  text: "Grâce à notre réseau international, nous facilitons l'accès à des matériaux, équipements et solutions conformes aux normes internationales.",
+  badges: [
+    "Contrôle qualité",
+    "Produits certifiés",
+    "Meilleurs prix",
+    "Livraison sécurisée",
+  ],
+  // Recadrage "_clean" (même convention que p3_photo_clean.jpg etc.) : le
+  // fichier brut p12_photo.jpg contient un reste de texte du catalogue
+  // ("...NNEMENT") sur le bord gauche, repéré visuellement lors du test de
+  // rendu de ce lot — rogné ici avant mise en ligne.
+  img: "/images/p12_photo_clean.jpg",
+} as const;
+
 export const SECTORS = [
   { name: "Entreprises", img: "/images/sector_entreprises.jpg" },
   { name: "Banques", img: "/images/sector_banques.jpg" },
@@ -190,6 +287,8 @@ export const CONTACT = {
 } as const;
 
 // Réseaux sociaux réels de SOPRINA BUILDING SARL (fournis par le client).
+// TikTok ajouté le 2026-10-10 (URL fournie par le client, paramètres de
+// tracking "_r"/"_t" retirés pour ne garder que le lien de profil canonique).
 export const SOCIALS = [
   { name: "WhatsApp", href: "https://wa.me/237677596444", icon: "whatsapp" },
   { name: "Facebook", href: "https://www.facebook.com/profile.php?id=61592677316511", icon: "facebook" },
@@ -197,6 +296,7 @@ export const SOCIALS = [
   { name: "LinkedIn", href: "https://www.linkedin.com/company/soprina-building-sarl/", icon: "linkedin" },
   { name: "X", href: "https://x.com/soprinabuilding", icon: "x" },
   { name: "Threads", href: "https://www.threads.com/@soprinabuildingsarl", icon: "threads" },
+  { name: "TikTok", href: "https://www.tiktok.com/@soprina.building", icon: "tiktok" },
 ] as const;
 
 // --- Contenu page "Qui sommes-nous" (pages 2-3 du dépliant) ---

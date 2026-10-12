@@ -52,6 +52,14 @@ export function ThreadsIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function TiktokIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M16.6 2h-3.2v13.6c0 1.52-1.23 2.76-2.76 2.76A2.76 2.76 0 0 1 7.88 15.6a2.76 2.76 0 0 1 2.76-2.76c.3 0 .6.05.86.13V9.7a6.03 6.03 0 0 0-.86-.06A6.02 6.02 0 0 0 4.62 15.6a6.02 6.02 0 0 0 6.02 6.02 6.02 6.02 0 0 0 6.02-6.02V8.27a7.6 7.6 0 0 0 4.42 1.4V6.4a4.4 4.4 0 0 1-4.46-4.4Z" />
+    </svg>
+  );
+}
+
 export const SOCIAL_ICONS = {
   whatsapp: WhatsappIcon,
   x: XIcon,
@@ -59,4 +67,5 @@ export const SOCIAL_ICONS = {
   facebook: FacebookIcon,
   linkedin: LinkedinIcon,
   threads: ThreadsIcon,
+  tiktok: TiktokIcon,
 } as const;

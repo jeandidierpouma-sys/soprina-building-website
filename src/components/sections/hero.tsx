@@ -7,14 +7,43 @@ import { ShieldCheck, Timer, Wrench } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-const STATS = [
-  { icon: ShieldCheck, label: "Qualité & sécurité", value: "À chaque étape" },
-  { icon: Wrench, label: "7 domaines", value: "d'expertise intégrés" },
-  { icon: Timer, label: "Délais", value: "respectés, engagement tenu" },
-];
+const TEXT = {
+  fr: {
+    // Slogan de marque (identité validée) : "Vos projets en toute sérénité".
+    // Statut : PARTIAL — traduction proposée côté EN, pas encore validée par
+    // SOPRINA BUILDING comme signature officielle en anglais.
+    title: "Vos projets en toute sérénité",
+    body:
+      "SOPRINA BUILDING accompagne ses clients dans la réalisation de projets de construction performants, de la conception à la livraison — construction, ingénierie, aménagement, installations techniques et maintenance.",
+    ctaContact: "Contactez-nous pour votre projet",
+    ctaDomains: "Nos domaines d'expertise",
+    stats: [
+      { icon: ShieldCheck, label: "Qualité & sécurité", value: "À chaque étape" },
+      { icon: Wrench, label: "7 domaines", value: "d'expertise intégrés" },
+      { icon: Timer, label: "Délais", value: "respectés, engagement tenu" },
+    ],
+    domainsHref: "/domaines",
+    contactHref: "/contact",
+  },
+  en: {
+    title: "Your projects, in complete peace of mind",
+    body:
+      "SOPRINA BUILDING supports its clients in delivering high-performing construction projects, from design through to handover — construction, engineering, fit-out, technical installations and maintenance.",
+    ctaContact: "Contact us about your project",
+    ctaDomains: "Our areas of expertise",
+    stats: [
+      { icon: ShieldCheck, label: "Quality & safety", value: "At every stage" },
+      { icon: Wrench, label: "7 areas", value: "of integrated expertise" },
+      { icon: Timer, label: "Deadlines", value: "met, as committed" },
+    ],
+    domainsHref: "/en/domaines",
+    contactHref: "/en/contact",
+  },
+} as const;
 
-export function Hero() {
+export function Hero({ locale = "fr" }: { locale?: "fr" | "en" }) {
   const shouldReduceMotion = useReducedMotion();
+  const t = TEXT[locale];
 
   const container: Variants = {
     hidden: {},
@@ -66,17 +95,14 @@ export function Hero() {
             variants={item}
             className="text-4xl font-bold leading-[1.08] text-white sm:text-5xl lg:text-6xl"
           >
-            Vos projets en toute sérénité
+            {t.title}
           </motion.h1>
 
           <motion.p
             variants={item}
             className="mt-6 max-w-xl text-lg leading-relaxed text-white/70"
           >
-            SOPRINA BUILDING accompagne ses clients dans la réalisation de
-            projets de construction performants, de la conception à la
-            livraison — construction, ingénierie, aménagement, installations
-            techniques et maintenance.
+            {t.body}
           </motion.p>
 
           <motion.div
@@ -84,10 +110,10 @@ export function Hero() {
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <Button asChild size="lg">
-              <Link href="/contact">Contactez-nous pour votre projet</Link>
+              <Link href={t.contactHref}>{t.ctaContact}</Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="/domaines">Nos domaines d&apos;expertise</Link>
+              <Link href={t.domainsHref}>{t.ctaDomains}</Link>
             </Button>
           </motion.div>
 
@@ -95,7 +121,7 @@ export function Hero() {
             variants={item}
             className="mt-20 grid max-w-2xl grid-cols-1 gap-6 border-t border-white/10 pt-8 sm:grid-cols-3"
           >
-            {STATS.map(({ icon: Icon, label, value }) => (
+            {t.stats.map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-start gap-3">
                 <Icon className="mt-0.5 size-5 shrink-0 text-sb-gold" />
                 <div>

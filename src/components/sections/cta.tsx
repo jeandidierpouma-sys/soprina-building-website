@@ -6,7 +6,28 @@ import { Button } from "@/components/ui/button";
 import { CONTACT } from "@/lib/content";
 import { Reveal } from "@/components/motion/reveal";
 
-export function Cta() {
+const TEXT = {
+  fr: {
+    title: "Votre projet mérite un partenaire à la hauteur",
+    body:
+      "Qu'il s'agisse de construction, rénovation, équipements ou infrastructures, SOPRINA BUILDING est votre partenaire de confiance.",
+    quote: "Demander un devis",
+    talk: "Parler à un conseiller",
+    devisHref: "/devis",
+  },
+  en: {
+    title: "Your project deserves a partner equal to it",
+    body:
+      "Whether it's construction, renovation, equipment or infrastructure, SOPRINA BUILDING is your trusted partner.",
+    quote: "Request a quote",
+    talk: "Talk to an advisor",
+    devisHref: "/en/devis",
+  },
+} as const;
+
+export function Cta({ locale = "fr" }: { locale?: "fr" | "en" }) {
+  const t = TEXT[locale];
+
   return (
     <section className="relative isolate overflow-hidden bg-sb-navy-deep-2 py-24">
       <Image
@@ -20,17 +41,22 @@ export function Cta() {
       <div className="container-sb relative z-10">
         <Reveal className="max-w-xl">
           <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
-            Votre projet mérite un partenaire à la hauteur
+            {t.title}
           </h2>
-          <p className="mt-4 text-white/70">
-            Qu&apos;il s&apos;agisse de construction, rénovation, équipements
-            ou infrastructures, SOPRINA BUILDING est votre partenaire de
-            confiance.
-          </p>
+          <p className="mt-4 text-white/70">{t.body}</p>
 
           <div className="mt-8 flex flex-wrap gap-4">
             <Button asChild size="lg">
-              <Link href="/devis">Demander un devis</Link>
+              <Link href={t.devisHref}>{t.quote}</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <a
+                href={CONTACT.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.talk}
+              </a>
             </Button>
           </div>
 

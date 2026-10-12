@@ -3,29 +3,38 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import { DOMAINS } from "@/lib/content";
+import { DOMAINS_EN } from "@/lib/content.en";
 import { Reveal } from "@/components/motion/reveal";
 
-export function DomainsPreview() {
+const TEXT = {
+  fr: { title: "Nos domaines d'expertise", link: "Voir les 7 domaines en détail", href: "/domaines" },
+  en: { title: "Our areas of expertise", link: "See all 7 areas in detail", href: "/en/domaines" },
+} as const;
+
+export function DomainsPreview({ locale = "fr" }: { locale?: "fr" | "en" }) {
+  const domains = locale === "en" ? DOMAINS_EN : DOMAINS;
+  const t = TEXT[locale];
+
   return (
     <section className="bg-white py-24">
       <div className="container-sb">
         <Reveal className="mb-14 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <div>
             <h2 className="max-w-xl text-3xl font-bold text-sb-navy sm:text-4xl">
-              Nos domaines d&apos;expertise
+              {t.title}
             </h2>
           </div>
           <Link
-            href="/domaines"
+            href={t.href}
             className="focus-ring group flex items-center gap-1.5 text-sm font-semibold text-sb-navy hover:text-sb-gold"
           >
-            Voir les 7 domaines en détail
+            {t.link}
             <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </Reveal>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {DOMAINS.map((d, i) => (
+          {domains.map((d, i) => (
             <Reveal
               key={d.n}
               delay={Math.min(i * 0.07, 0.35)}
@@ -42,6 +51,16 @@ export function DomainsPreview() {
                   />
                 </div>
                 <div className="p-5">
+                  {/* Le visuel `icon` (catalogue p4_c1..7.png) a le numéro et
+                      le titre incrustés dans l'image, en français — correct
+                      en FR, mais incohérent sur la page EN (ex. "4. SMART
+                      BUILDING & SÉCURITÉ"). Pas de source EN de ces visuels
+                      disponible : on affiche le titre traduit en texte réel
+                      au-dessus de la description, uniquement en EN, pour ne
+                      pas changer la carte FR déjà validée. */}
+                  {locale === "en" && (
+                    <p className="mb-1.5 font-semibold text-sb-navy">{d.title}</p>
+                  )}
                   <p className="text-sm leading-relaxed text-sb-body">
                     {d.desc}
                   </p>

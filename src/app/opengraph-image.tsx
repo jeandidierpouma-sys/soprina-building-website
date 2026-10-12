@@ -23,6 +23,17 @@ const poppinsSemibold = readFileSync(
   )
 );
 
+// Logo réel (fourni par le client le 2026-10-11) encodé en data URI —
+// remplace le losange dessiné à la main utilisé ici auparavant (faute
+// d'un fichier logo exploitable à l'époque : le seul PNG disponible avait
+// du texte et un fond non détourables, voir git blame). ImageResponse ne
+// peut pas charger une URL externe de façon fiable, donc on lit le
+// fichier au build comme pour les polices ci-dessus.
+const logoMarkBase64 = readFileSync(
+  join(process.cwd(), "public/images/brand/logo-mark.png")
+).toString("base64");
+const logoMarkSrc = `data:image/png;base64,${logoMarkBase64}`;
+
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -40,17 +51,8 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <div
-            style={{
-              display: "flex",
-              width: 30,
-              height: 30,
-              transform: "rotate(45deg)",
-              background:
-                "linear-gradient(135deg, #f7c968 0%, #f0b23e 55%, #c98a1f 100%)",
-              borderRadius: 6,
-            }}
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse (Satori) requires a plain <img>, not next/image */}
+          <img src={logoMarkSrc} width={44} height={51} alt="" />
           <div
             style={{
               display: "flex",

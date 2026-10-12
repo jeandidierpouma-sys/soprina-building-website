@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, PhoneCall } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,68 +13,118 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { NAV_LINKS, CONTACT } from "@/lib/content";
+import { NAV_LINKS_EN } from "@/lib/content.en";
 
-export function SiteHeader() {
+const TEXT = {
+  fr: { cta: "Demander un devis", openMenu: "Ouvrir le menu" },
+  en: { cta: "Request a quote", openMenu: "Open menu" },
+} as const;
+
+// Calcule l'URL équivalente dans l'autre langue à partir du chemin courant,
+// en préfixant/retirant simplement "/en" — pas de table de correspondance
+// séparée à maintenir : les deux arborescences de pages partagent les mêmes
+// segments d'URL (ex. /domaines ↔ /en/domaines).
+function otherLocaleHref(pathname: string, locale: "fr" | "en") {
+  if (locale === "en") {
+    const stripped = pathname.replace(/^\/en/, "") || "/";
+    return stripped;
+  }
+  return pathname === "/" ? "/en" : `/en${pathname}`;
+}
+
+export function SiteHeader({ locale = "fr" }: { locale?: "fr" | "en" }) {
+  const pathname = usePathname();
+  const links = locale === "en" ? NAV_LINKS_EN : NAV_LINKS;
+  const t = TEXT[locale];
+  const homeHref = locale === "en" ? "/en" : "/";
+  const otherHref = otherLocaleHref(pathname, locale);
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-sb-navy/95 backdrop-blur supports-[backdrop-filter]:bg-sb-navy/80">
       <div className="container-sb flex h-20 items-center justify-between">
-        <Link href="/" className="focus-ring flex items-center gap-3">
+        {/* Logo officiel fourni par le client le 2026-10-11 (remplace l'ancien
+            p1_logo.png extrait du dépliant, qui avait son propre fond sombre
+            baked-in). Le texte du logo est en bleu marine : illisible posé
+            directement sur le header, donc on le pose sur une carte blanche
+            plutôt que de recolorer le texte — on ne modifie pas les couleurs
+            de la marque. Voir claude/brand-logo.md pour le détail. */}
+        <Link
+          href={homeHref}
+          className="focus-ring flex shrink-0 items-center gap-3 rounded-md bg-white px-2.5 py-1.5 shadow-sm"
+        >
           <Image
-            src="/images/p1_logo.png"
+            src="/images/brand/logo-full.png"
             alt="SOPRINA BUILDING"
-            width={200}
-            height={80}
-            className="h-12 w-auto rounded-md ring-1 ring-white/15"
+            width={189}
+            height={79}
+            className="h-9 w-[86px] shrink-0"
             priority
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((link) => (
+        <nav className="hidden items-center gap-3 xl:flex xl:gap-4">
+          {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="focus-ring text-sm font-medium text-white/85 transition-colors hover:text-sb-gold"
+              className="focus-ring whitespace-nowrap text-sm font-medium text-white/85 transition-colors hover:text-sb-gold"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-2 xl:flex">
+          {/* Numéro masqué en texte entre xl et 2xl (1280–1535px) : à cette
+              largeur, logo + 8 liens de nav + sélecteur de langue + CTA ne
+              tiennent pas sur une seule ligne avec le numéro en toutes lettres
+              (mesuré : dépassement réel de ~30 à 110px selon la largeur, vu
+              jusqu'à 1495px). L'icône reste un lien tel: cliquable à toutes
+              les largeurs ⩾1280px ; le numéro en texte revient à partir de
+              2xl, où la place ne manque plus. */}
           <a
             href={`tel:${CONTACT.phones[0].replace(/\s/g, "")}`}
-            className="focus-ring flex items-center gap-2 text-sm font-medium text-white/85 hover:text-sb-gold"
+            aria-label={`${locale === "fr" ? "Appeler" : "Call"} ${CONTACT.phones[0]}`}
+            className="focus-ring flex items-center gap-2 whitespace-nowrap text-sm font-medium text-white/85 hover:text-sb-gold"
           >
-            <PhoneCall className="size-4 text-sb-gold" />
-            {CONTACT.phones[0]}
+            <PhoneCall className="size-4 shrink-0 text-sb-gold" />
+            <span className="hidden 2xl:inline">{CONTACT.phones[0]}</span>
           </a>
+          <Link
+            href={otherHref}
+            className="focus-ring shrink-0 rounded-full border border-white/20 px-2.5 py-1 text-xs font-semibold text-white/75 transition-colors hover:border-sb-gold/50 hover:text-sb-gold"
+            aria-label={locale === "fr" ? "Switch to English" : "Passer en français"}
+          >
+            {locale === "fr" ? "EN" : "FR"}
+          </Link>
           <Button asChild size="sm">
-            <Link href="/devis">Demander un devis</Link>
+            <Link href={locale === "en" ? "/en/devis" : "/devis"}>{t.cta}</Link>
           </Button>
         </div>
 
         <Sheet>
           <SheetTrigger asChild>
             <button
-              className="focus-ring flex size-11 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10 lg:hidden"
-              aria-label="Ouvrir le menu"
+              className="focus-ring flex size-11 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10 xl:hidden"
+              aria-label={t.openMenu}
             >
               <Menu className="size-6" />
             </button>
           </SheetTrigger>
           <SheetContent>
             <div className="flex items-center gap-3 pb-4">
-              <Image
-                src="/images/p1_logo.png"
-                alt="SOPRINA BUILDING"
-                width={140}
-                height={42}
-                className="h-8 w-auto"
-              />
+              <div className="flex shrink-0 items-center rounded-md bg-white px-2 py-1">
+                <Image
+                  src="/images/brand/logo-full.png"
+                  alt="SOPRINA BUILDING"
+                  width={189}
+                  height={79}
+                  className="h-7 w-[67px] shrink-0"
+                />
+              </div>
             </div>
             <nav className="flex flex-col gap-5">
-              {NAV_LINKS.map((link) => (
+              {links.map((link) => (
                 <SheetClose asChild key={link.href}>
                   <Link
                     href={link.href}
@@ -93,8 +144,16 @@ export function SiteHeader() {
                 {CONTACT.phones[0]}
               </a>
               <SheetClose asChild>
+                <Link
+                  href={otherHref}
+                  className="focus-ring self-start rounded-full border border-white/20 px-2.5 py-1 text-xs font-semibold text-white/75"
+                >
+                  {locale === "fr" ? "EN" : "FR"}
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
                 <Button asChild>
-                  <Link href="/devis">Demander un devis</Link>
+                  <Link href={locale === "en" ? "/en/devis" : "/devis"}>{t.cta}</Link>
                 </Button>
               </SheetClose>
             </div>

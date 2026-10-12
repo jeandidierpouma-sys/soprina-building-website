@@ -1,0 +1,101 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+
+import { PageHero } from "@/components/sections/page-hero";
+import { Cta } from "@/components/sections/cta";
+import { METHOD_STEPS_EN, ENGAGEMENTS_EN, WHY_US_EN } from "@/lib/content.en";
+import { pageMetadata } from "@/lib/seo";
+import { Reveal } from "@/components/motion/reveal";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Our method — SOPRINA BUILDING",
+  description:
+    "Listen, assess, propose, execute, check — a clear approach, from the first conversation to handover.",
+  path: "/en/methode",
+});
+
+export default function MethodePageEn() {
+  return (
+    <>
+      <PageHero
+        locale="en"
+        eyebrow="Our method"
+        title="A clear approach, from the first conversation to handover"
+      />
+
+      <section className="bg-white py-24">
+        <div className="container-sb">
+          <div className="relative flex flex-col gap-10 lg:flex-row lg:gap-6">
+            {METHOD_STEPS_EN.map((step, i) => (
+              <Reveal key={step.n} delay={i * 0.1} className="relative flex-1">
+                <div className="flex items-center gap-4 lg:flex-col lg:items-start lg:gap-0">
+                  <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-sb-navy text-lg font-bold text-sb-gold">
+                    {step.n}
+                  </span>
+                  <div className="lg:mt-5">
+                    <h2 className="text-xl font-bold text-sb-navy">
+                      {step.title}
+                    </h2>
+                  </div>
+                </div>
+                <p className="mt-3 leading-relaxed text-sb-body lg:pr-4">
+                  {step.desc}
+                </p>
+                {i < METHOD_STEPS_EN.length - 1 && (
+                  <span className="absolute top-7 left-14 hidden h-px w-full bg-sb-grayline lg:block" />
+                )}
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-muted py-24">
+        <div className="container-sb grid gap-14 lg:grid-cols-2 lg:items-center">
+          <Reveal
+            direction="left"
+            className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-xl"
+          >
+            <Image
+              src="/images/p15_photo.jpg"
+              alt="The SOPRINA BUILDING team"
+              fill
+              className="object-cover"
+            />
+          </Reveal>
+
+          <Reveal direction="right" delay={0.1}>
+            <span className="mb-4 inline-block rounded-full bg-sb-gold/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-sb-navy">
+              Our commitments
+            </span>
+            <div className="grid grid-cols-2 gap-4">
+              {ENGAGEMENTS_EN.map((e, i) => (
+                <Reveal key={e.n} delay={0.15 + i * 0.07} amount={0.4}>
+                  <div className="rounded-2xl bg-sb-navy p-6 text-white transition-all hover:-translate-y-1 hover:shadow-lg">
+                    <span className="text-sm font-semibold text-sb-gold">
+                      {e.n}
+                    </span>
+                    <p className="mt-2 text-xl font-bold">{e.title}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-2">
+              {WHY_US_EN.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full bg-white px-4 py-2 text-sm font-medium text-sb-navy shadow-sm"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <Cta locale="en" />
+    </>
+  );
+}

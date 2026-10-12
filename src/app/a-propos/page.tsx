@@ -9,9 +9,9 @@ import { pageMetadata } from "@/lib/seo";
 import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Qui sommes-nous — SOPRINA BUILDING",
+  title: "Qui sommes-nous — SOPRINA BUILDING, entreprise BTP à Douala",
   description:
-    "SOPRINA BUILDING accompagne ses clients dans la réalisation de projets de construction performants, de la conception à la livraison.",
+    "SOPRINA BUILDING accompagne ses clients à Douala et en Afrique centrale dans la réalisation de projets de construction performants, de la conception à la livraison.",
   path: "/a-propos",
 });
 
@@ -22,6 +22,7 @@ export default function AProposPage() {
         eyebrow="Qui sommes-nous"
         title="Un partenaire technique, du premier plan à la livraison"
         description="Professionnalisme, expertise et accompagnement durable — au service de chaque chantier."
+        bgImage="/images/p2_photo_clean.jpg"
       />
 
       <section className="bg-white py-24">

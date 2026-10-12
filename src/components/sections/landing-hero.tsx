@@ -6,26 +6,36 @@ import { MapPin, Layers, MessageCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-const TRUST = [
-  {
-    icon: Layers,
-    label: "7 domaines d'expertise",
-    value: "construction, ingénierie, maintenance...",
+const TEXT = {
+  fr: {
+    eyebrow: "Demande de devis",
+    title: "Parlez-nous de votre projet, recevons une solution adaptée",
+    body:
+      "SOPRINA BUILDING accompagne ses clients de la conception à la livraison — construction, ingénierie, aménagement, installations techniques et maintenance.",
+    cta: "Demander mon devis",
+    trust: [
+      { icon: Layers, label: "7 domaines d'expertise", value: "construction, ingénierie, maintenance..." },
+      { icon: MapPin, label: "Basés à Douala", value: "Bonanjo, près de Kenya Airways" },
+      { icon: MessageCircle, label: "Échange direct", value: "téléphone, WhatsApp ou e-mail" },
+    ],
   },
-  {
-    icon: MapPin,
-    label: "Basés à Douala",
-    value: "Bonanjo, près de Kenya Airways",
+  en: {
+    eyebrow: "Quote request",
+    title: "Tell us about your project, get a tailored solution",
+    body:
+      "SOPRINA BUILDING supports its clients from design through to handover — construction, engineering, fit-out, technical installations and maintenance.",
+    cta: "Request my quote",
+    trust: [
+      { icon: Layers, label: "7 areas of expertise", value: "construction, engineering, maintenance..." },
+      { icon: MapPin, label: "Based in Douala", value: "Bonanjo, near Kenya Airways" },
+      { icon: MessageCircle, label: "Direct contact", value: "phone, WhatsApp or e-mail" },
+    ],
   },
-  {
-    icon: MessageCircle,
-    label: "Échange direct",
-    value: "téléphone, WhatsApp ou e-mail",
-  },
-];
+} as const;
 
-export function LandingHero() {
+export function LandingHero({ locale = "fr" }: { locale?: "fr" | "en" }) {
   const shouldReduceMotion = useReducedMotion();
+  const t = TEXT[locale];
 
   // Le bloc d'accroche apparaît en cascade (eyebrow → titre → texte → CTA →
   // réassurance) plutôt que d'un seul bloc : chaque enfant hérite du stagger
@@ -95,26 +105,24 @@ export function LandingHero() {
             variants={item}
             className="text-sm font-semibold uppercase tracking-wide text-sb-gold"
           >
-            Demande de devis
+            {t.eyebrow}
           </motion.span>
           <motion.h1
             variants={item}
             className="mt-3 text-4xl font-bold leading-[1.1] text-white sm:text-5xl"
           >
-            Parlez-nous de votre projet, recevons une solution adaptée
+            {t.title}
           </motion.h1>
           <motion.p
             variants={item}
             className="mt-6 max-w-lg text-lg leading-relaxed text-white/75"
           >
-            SOPRINA BUILDING accompagne ses clients de la conception à la
-            livraison — construction, ingénierie, aménagement, installations
-            techniques et maintenance.
+            {t.body}
           </motion.p>
 
           <motion.div variants={ctaItem} className="mt-10">
             <Button asChild size="lg">
-              <a href="#devis-form">Demander mon devis</a>
+              <a href="#devis-form">{t.cta}</a>
             </Button>
           </motion.div>
 
@@ -122,7 +130,7 @@ export function LandingHero() {
             variants={item}
             className="mt-16 grid max-w-lg grid-cols-1 gap-6 border-t border-white/10 pt-8 sm:grid-cols-3"
           >
-            {TRUST.map(({ icon: Icon, label, value }) => (
+            {t.trust.map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-start gap-3">
                 <Icon className="mt-0.5 size-5 shrink-0 text-sb-gold" />
                 <div>

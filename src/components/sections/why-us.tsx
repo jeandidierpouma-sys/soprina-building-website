@@ -7,20 +7,30 @@ import {
 } from "lucide-react";
 
 import { WHY_US, ENGAGEMENTS } from "@/lib/content";
+import { WHY_US_EN, ENGAGEMENTS_EN } from "@/lib/content.en";
 import { Reveal } from "@/components/motion/reveal";
 
 const ICONS = [Award, Layers, ShieldCheck, Clock, HeartHandshake];
 
-export function WhyUs() {
+const TEXT = {
+  fr: { why: "Pourquoi choisir SOPRINA BUILDING ?", engagements: "Nos engagements" },
+  en: { why: "Why choose SOPRINA BUILDING?", engagements: "Our commitments" },
+} as const;
+
+export function WhyUs({ locale = "fr" }: { locale?: "fr" | "en" }) {
+  const whyUs = locale === "en" ? WHY_US_EN : WHY_US;
+  const engagements = locale === "en" ? ENGAGEMENTS_EN : ENGAGEMENTS;
+  const t = TEXT[locale];
+
   return (
     <section className="bg-white py-24">
       <div className="container-sb grid gap-16 lg:grid-cols-2">
         <Reveal direction="left">
           <h2 className="mb-6 text-3xl font-bold text-sb-navy sm:text-4xl">
-            Pourquoi choisir SOPRINA BUILDING ?
+            {t.why}
           </h2>
           <div className="flex flex-col gap-5">
-            {WHY_US.map((item, i) => {
+            {whyUs.map((item, i) => {
               const Icon = ICONS[i];
               return (
                 <Reveal key={item} delay={i * 0.08} amount={0.4}>
@@ -38,10 +48,10 @@ export function WhyUs() {
 
         <Reveal direction="right">
           <h2 className="mb-6 text-3xl font-bold text-sb-navy sm:text-4xl">
-            Nos engagements
+            {t.engagements}
           </h2>
           <div className="grid grid-cols-2 gap-5">
-            {ENGAGEMENTS.map((e, i) => (
+            {engagements.map((e, i) => (
               <Reveal key={e.n} delay={i * 0.08} amount={0.4}>
                 <div className="rounded-2xl bg-sb-navy p-6 text-white transition-all hover:-translate-y-1 hover:shadow-lg">
                   <span className="text-sm font-semibold text-sb-gold">

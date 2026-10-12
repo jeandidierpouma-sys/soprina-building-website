@@ -1,5 +1,6 @@
 import { Hero } from "@/components/sections/hero";
 import { DomainsPreview } from "@/components/sections/domains-preview";
+import { RealisationsPreview } from "@/components/sections/realisations-preview";
 import { SectorsStrip } from "@/components/sections/sectors-strip";
 import { MethodPreview } from "@/components/sections/method-preview";
 import { WhyUs } from "@/components/sections/why-us";
@@ -10,6 +11,7 @@ export default function Home() {
     <>
       <Hero />
       <DomainsPreview />
+      <RealisationsPreview />
       <SectorsStrip />
       <MethodPreview />
       <WhyUs />

@@ -8,9 +8,9 @@ import { pageMetadata } from "@/lib/seo";
 import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Nos solutions par secteur — SOPRINA BUILDING",
+  title: "Nos solutions par secteur — SOPRINA BUILDING, Douala",
   description:
-    "Entreprises, banques, hôtels, industries, écoles & universités, administrations, institutions, commerces, centres médicaux.",
+    "Entreprises, banques, hôtels, industries, écoles & universités, administrations, institutions, commerces, centres médicaux — à Douala et dans toute la région desservie.",
   path: "/secteurs",
 });
 

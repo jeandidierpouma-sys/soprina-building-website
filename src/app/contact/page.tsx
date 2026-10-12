@@ -29,6 +29,7 @@ export default function ContactPage() {
         eyebrow="Contact"
         title="Contactez-nous pour votre projet"
         description="Qu'il s'agisse de construction, rénovation, équipements ou infrastructures, SOPRINA BUILDING est votre partenaire de confiance."
+        bgImage="/images/p18_photo.jpg"
       />
 
       <section className="bg-white py-20">

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PageHero } from "@/components/sections/page-hero";
+import { SupplyChain } from "@/components/sections/supply-chain";
 import { Cta } from "@/components/sections/cta";
 import { Button } from "@/components/ui/button";
 import { DOMAINS } from "@/lib/content";
@@ -10,9 +11,9 @@ import { pageMetadata } from "@/lib/seo";
 import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Nos domaines d'expertise — SOPRINA BUILDING",
+  title: "Nos domaines d'expertise — SOPRINA BUILDING, Douala",
   description:
-    "Construction & génie civil, aménagement & rénovation, électricité & énergie, smart building & sécurité, climatisation & froid, maintenance & facility solutions, fourniture de matériaux.",
+    "Construction & génie civil, aménagement & rénovation, électricité & énergie, smart building & sécurité, climatisation & froid, maintenance & facility solutions, fourniture de matériaux — à Douala et en Afrique centrale.",
   path: "/domaines",
 });
 
@@ -84,6 +85,8 @@ export default function DomainesPage() {
           </Button>
         </div>
       </section>
+
+      <SupplyChain />
 
       <Cta />
     </>
