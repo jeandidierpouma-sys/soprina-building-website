@@ -42,24 +42,34 @@ export function SiteHeader({ locale = "fr" }: { locale?: "fr" | "en" }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-sb-navy/95 backdrop-blur supports-[backdrop-filter]:bg-sb-navy/80">
       <div className="container-sb flex h-20 items-center justify-between">
-        {/* Logo officiel fourni par le client le 2026-10-11 (remplace l'ancien
-            p1_logo.png extrait du dépliant, qui avait son propre fond sombre
-            baked-in). Le texte du logo est en bleu marine : illisible posé
-            directement sur le header, donc on le pose sur une carte blanche
-            plutôt que de recolorer le texte — on ne modifie pas les couleurs
-            de la marque. Voir claude/brand-logo.md pour le détail. */}
+        {/* Logo officiel du client. Mark seul (carte blanche, nécessaire :
+            le mark posé directement sur le marine perd son contour à cette
+            échelle — vérifié par rendu), sans le nom en toutes lettres ici :
+            la barre desktop (8 liens + tél. + FR/EN + CTA) tient déjà tout
+            juste dans max-w-7xl (voir le correctif de dépassement 1280-1495
+            plus bas) — y ajouter "SOPRINA BUILDING" en texte, même réduit,
+            recolle le logo au premier lien de nav à partir de 2xl (mesuré :
+            écart nul, testé jusqu'à 1920px). Le nom complet reste affiché en
+            texte HTML (net à toute taille, pas en image) dans le menu
+            mobile et le footer, qui ont la place. Pourquoi pas une image
+            unique mark+nom comme avant : le lockup complet devenait
+            illisible une fois réduit à la taille réelle d'affichage
+            (~172×72px à 2x) — vérifié par rendu à cette taille exacte le
+            2026-10-13, confirmé avec DESH. Voir claude/brand-logo.md. */}
         <Link
           href={homeHref}
-          className="focus-ring flex shrink-0 items-center gap-3 rounded-md bg-white px-2.5 py-1.5 shadow-sm"
+          className="focus-ring flex shrink-0 items-center"
         >
-          <Image
-            src="/images/brand/logo-full.png"
-            alt="SOPRINA BUILDING"
-            width={189}
-            height={79}
-            className="h-9 w-[86px] shrink-0"
-            priority
-          />
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-white p-1.5 shadow-sm">
+            <Image
+              src="/images/brand/logo-mark.png"
+              alt="SOPRINA BUILDING"
+              width={185}
+              height={204}
+              className="h-full w-auto"
+              priority
+            />
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-3 xl:flex xl:gap-4">
@@ -111,16 +121,19 @@ export function SiteHeader({ locale = "fr" }: { locale?: "fr" | "en" }) {
             </button>
           </SheetTrigger>
           <SheetContent>
-            <div className="flex items-center gap-3 pb-4">
-              <div className="flex shrink-0 items-center rounded-md bg-white px-2 py-1">
+            <div className="flex items-center gap-2.5 pb-4">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-white p-1.5 shadow-sm">
                 <Image
-                  src="/images/brand/logo-full.png"
+                  src="/images/brand/logo-mark.png"
                   alt="SOPRINA BUILDING"
-                  width={189}
-                  height={79}
-                  className="h-7 w-[67px] shrink-0"
+                  width={185}
+                  height={204}
+                  className="h-full w-auto"
                 />
-              </div>
+              </span>
+              <span aria-hidden="true" className="text-base font-bold tracking-wide text-white">
+                SOPRINA <span className="text-sb-gold">BUILDING</span>
+              </span>
             </div>
             <nav className="flex flex-col gap-5">
               {links.map((link) => (

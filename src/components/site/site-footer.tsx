@@ -42,16 +42,21 @@ export function SiteFooter({ locale = "fr" }: { locale?: "fr" | "en" }) {
     <footer className="bg-sb-navy-deep text-white/80">
       <div className="container-sb grid gap-10 py-16 lg:grid-cols-4">
         <div className="lg:col-span-2">
-          {/* Carte blanche : le texte du logo est en bleu marine, illisible
-              posé directement sur le footer sombre — voir site-header.tsx. */}
-          <div className="mb-5 inline-flex shrink-0 items-center rounded-md bg-white px-2.5 py-1.5 shadow-sm">
-            <Image
-              src="/images/brand/logo-full.png"
-              alt="SOPRINA BUILDING"
-              width={189}
-              height={79}
-              className="h-9 w-[86px] shrink-0"
-            />
+          {/* Mark seul (carte blanche) + nom en texte HTML — voir le
+              commentaire détaillé dans site-header.tsx. */}
+          <div className="mb-5 inline-flex items-center gap-2.5">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-white p-1.5 shadow-sm">
+              <Image
+                src="/images/brand/logo-mark.png"
+                alt="SOPRINA BUILDING"
+                width={185}
+                height={204}
+                className="h-full w-auto"
+              />
+            </span>
+            <span aria-hidden="true" className="text-lg font-bold tracking-wide text-white">
+              SOPRINA <span className="text-sb-gold">BUILDING</span>
+            </span>
           </div>
           <p className="max-w-md text-sm leading-relaxed text-white/60">{t.intro}</p>
 
