@@ -42,22 +42,17 @@ export function SiteFooter({ locale = "fr" }: { locale?: "fr" | "en" }) {
     <footer className="bg-sb-navy-deep text-white/80">
       <div className="container-sb grid gap-10 py-16 lg:grid-cols-4">
         <div className="lg:col-span-2">
-          {/* Mark seul (carte blanche) + nom en texte HTML — voir le
-              commentaire détaillé dans site-header.tsx. */}
-          <div className="mb-5 inline-flex items-center gap-2.5">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-white p-1.5 shadow-sm">
-              <Image
-                src="/images/brand/logo-mark.png"
-                alt="SOPRINA BUILDING"
-                width={185}
-                height={204}
-                className="h-full w-auto"
-              />
-            </span>
-            <span aria-hidden="true" className="text-lg font-bold tracking-wide text-white">
-              SOPRINA <span className="text-sb-gold">BUILDING</span>
-            </span>
-          </div>
+          {/* Lockup complet (carte blanche) — voir le commentaire détaillé
+              dans site-header.tsx. */}
+          <span className="mb-5 inline-flex shrink-0 items-center rounded-md bg-white px-3.5 py-2 shadow-sm">
+            <Image
+              src="/images/brand/logo-full.png"
+              alt="SOPRINA BUILDING"
+              width={1007}
+              height={373}
+              className="h-10 w-auto shrink-0"
+            />
+          </span>
           <p className="max-w-md text-sm leading-relaxed text-white/60">{t.intro}</p>
 
           <div className="mt-6 flex flex-wrap gap-2">
