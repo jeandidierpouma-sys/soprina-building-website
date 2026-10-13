@@ -75,20 +75,19 @@ export function SiteHeader({ locale = "fr" }: { locale?: "fr" | "en" }) {
         </nav>
 
         <div className="hidden items-center gap-2 xl:flex">
-          {/* Numéro masqué en texte entre xl et 2xl (1280–1535px) : à cette
-              largeur, logo + 8 liens de nav + sélecteur de langue + CTA ne
-              tiennent pas sur une seule ligne avec le numéro en toutes lettres
-              (mesuré : dépassement réel de ~30 à 110px selon la largeur, vu
-              jusqu'à 1495px). L'icône reste un lien tel: cliquable à toutes
-              les largeurs ⩾1280px ; le numéro en texte revient à partir de
-              2xl, où la place ne manque plus. */}
+          {/* Numéro affiché en icône seule (texte retiré le 2026-10-13, à la
+              demande du client, pour aérer la barre). Le lien tel: reste
+              cliquable et accessible (aria-label porte le numéro complet) ;
+              le numéro en toutes lettres reste visible dans le menu mobile,
+              le footer et /contact. Ceci rend aussi obsolète l'ancien
+              correctif de dépassement 1280–1495px (le texte ne s'affichait
+              qu'à partir de 2xl) : plus de risque de dépassement ici. */}
           <a
             href={`tel:${CONTACT.phones[0].replace(/\s/g, "")}`}
             aria-label={`${locale === "fr" ? "Appeler" : "Call"} ${CONTACT.phones[0]}`}
-            className="focus-ring flex items-center gap-2 whitespace-nowrap text-sm font-medium text-white/85 hover:text-sb-gold"
+            className="focus-ring flex items-center text-white/85 hover:text-sb-gold"
           >
             <PhoneCall className="size-4 shrink-0 text-sb-gold" />
-            <span className="hidden 2xl:inline">{CONTACT.phones[0]}</span>
           </a>
           <Link
             href={otherHref}

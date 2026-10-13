@@ -33,7 +33,22 @@ const TEXT = {
   },
 } as const;
 
-export function LandingHero({ locale = "fr" }: { locale?: "fr" | "en" }) {
+// Showreel vidéo en fond de hero — statut : IMPLEMENTED (code), MISSING en
+// données (aucune vidéo fournie par DESH à ce jour, nécessite une
+// production vidéo réelle, hors de mon périmètre). `heroVideo` reste
+// optionnel et `undefined` par défaut : sans valeur, le hero affiche la
+// photo statique exactement comme avant (zéro changement). Une fois un
+// clip disponible (court, compressé, h264/mp4, déposé dans public/videos/
+// — jamais via patch git, voir la note équivalente sur REALISATIONS dans
+// content.ts), il suffit de passer son chemin en prop depuis page.tsx.
+// Respecte prefers-reduced-motion : pas de lecture automatique si activé.
+export function LandingHero({
+  locale = "fr",
+  heroVideo,
+}: {
+  locale?: "fr" | "en";
+  heroVideo?: string;
+}) {
   const shouldReduceMotion = useReducedMotion();
   const t = TEXT[locale];
 
@@ -74,23 +89,35 @@ export function LandingHero({ locale = "fr" }: { locale?: "fr" | "en" }) {
 
   return (
     <section className="relative isolate flex min-h-[86vh] items-center overflow-hidden bg-sb-navy-deep">
-      <motion.div
-        className="absolute inset-0"
-        animate={shouldReduceMotion ? undefined : { scale: [1, 1.08, 1] }}
-        transition={
-          shouldReduceMotion
-            ? undefined
-            : { duration: 22, repeat: Infinity, ease: "easeInOut" }
-        }
-      >
-        <Image
-          src="/images/p14_photo.jpg"
-          alt="L'équipe SOPRINA BUILDING sur un chantier à Douala"
-          fill
-          priority
-          className="object-cover object-[75%_30%]"
+      {heroVideo && !shouldReduceMotion ? (
+        <video
+          className="absolute inset-0 h-full w-full object-cover object-[75%_30%]"
+          src={heroVideo}
+          poster="/images/p14_photo.jpg"
+          autoPlay
+          loop
+          muted
+          playsInline
         />
-      </motion.div>
+      ) : (
+        <motion.div
+          className="absolute inset-0"
+          animate={shouldReduceMotion ? undefined : { scale: [1, 1.08, 1] }}
+          transition={
+            shouldReduceMotion
+              ? undefined
+              : { duration: 22, repeat: Infinity, ease: "easeInOut" }
+          }
+        >
+          <Image
+            src="/images/p14_photo.jpg"
+            alt="L'équipe SOPRINA BUILDING sur un chantier à Douala"
+            fill
+            priority
+            className="object-cover object-[75%_30%]"
+          />
+        </motion.div>
+      )}
       <div className="absolute inset-0 bg-gradient-to-r from-sb-navy-deep via-sb-navy-deep/85 to-sb-navy-deep/40" />
       <div className="absolute inset-0 bg-gradient-to-t from-sb-navy-deep via-transparent to-transparent" />
 

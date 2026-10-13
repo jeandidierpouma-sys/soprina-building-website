@@ -7,6 +7,16 @@ import { CONTACT } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { WhatsappIcon } from "@/components/site/social-icons";
 import { Reveal } from "@/components/motion/reveal";
+import { ServiceAreaMap, type ServiceZone } from "@/components/sections/service-area-map";
+
+const SERVICE_ZONES: ServiceZone[] = [
+  {
+    name: "Douala – Bonanjo (head office)",
+    detail:
+      "Our head office is located in Bonanjo, near Kenya Airways. This is our most direct area of operation.",
+    confirmed: true,
+  },
+];
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact — SOPRINA BUILDING",
@@ -105,6 +115,10 @@ export default function ContactPageEn() {
                 className="h-full w-full"
                 loading="lazy"
               />
+            </div>
+
+            <div className="mt-6">
+              <ServiceAreaMap locale="en" zones={SERVICE_ZONES} />
             </div>
           </Reveal>
 

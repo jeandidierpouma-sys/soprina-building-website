@@ -63,12 +63,19 @@ export function RealisationsGrid({
           img={p.img}
           alt={p.title}
           gallery={p.gallery}
+          beforeImg={p.beforeImg}
+          afterImg={p.afterImg}
           video={p.video}
           videoUrl={p.videoUrl}
         />
       </div>
       <div className="p-5">
-        <span className="text-xs font-semibold uppercase tracking-wide text-sb-gold">
+        {/* Contraste : texte doré direct sur fond blanc = 1,89:1 (échec
+            WCAG AA 1.4.3, seuil 4,5:1 pour du texte normal — audit
+            accessibilité du 2026-10-12). bg-sb-gold/15 + text-sb-navy
+            conserve l'accent doré en fond tout en donnant un contraste
+            texte/fond réel de navy (#0d2148) sur quasi-blanc ≈ 14,8:1. */}
+        <span className="rounded-full bg-sb-gold/15 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-sb-navy">
           {p.category}
         </span>
         <p className="mt-1.5 font-semibold text-sb-navy">{p.title}</p>

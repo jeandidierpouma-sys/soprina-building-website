@@ -72,9 +72,11 @@ export function ArticlesGrid({
                 )}
               </div>
               <div className="p-5">
+                {/* Contraste : doré direct sur fond blanc = 1,89:1, échoue
+                    WCAG AA 1.4.3 (seuil 4,5:1) — audit du 2026-10-12. */}
                 <time
                   dateTime={a.publishedAt}
-                  className="text-xs font-semibold uppercase tracking-wide text-sb-gold"
+                  className="text-xs font-semibold uppercase tracking-wide text-sb-navy/70"
                 >
                   {new Date(a.publishedAt).toLocaleDateString(t.dateLocale, {
                     year: "numeric",

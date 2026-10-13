@@ -22,7 +22,9 @@ export default function NotFound() {
         <span className="flex size-16 items-center justify-center rounded-full bg-muted text-sb-navy">
           <Compass className="size-7" />
         </span>
-        <p className="text-sm font-semibold uppercase tracking-wide text-sb-gold">
+        {/* Contraste : doré direct sur fond blanc = 1,89:1, échoue WCAG AA
+            1.4.3 (seuil 4,5:1) — audit du 2026-10-12. */}
+        <p className="text-sm font-semibold uppercase tracking-wide text-sb-navy/70">
           Erreur 404
         </p>
         <h1 className="text-3xl font-bold text-sb-navy sm:text-4xl">

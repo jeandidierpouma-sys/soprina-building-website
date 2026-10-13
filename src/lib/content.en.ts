@@ -155,6 +155,8 @@ export const REALISATIONS_EN = [
     gallery: undefined as string[] | undefined,
     video: undefined as string | undefined,
     videoUrl: undefined as string | undefined,
+    beforeImg: undefined as string | undefined,
+    afterImg: undefined as string | undefined,
   },
   {
     slug: "amenagement-cuisine",
@@ -164,6 +166,8 @@ export const REALISATIONS_EN = [
     gallery: undefined as string[] | undefined,
     video: undefined as string | undefined,
     videoUrl: undefined as string | undefined,
+    beforeImg: undefined as string | undefined,
+    afterImg: undefined as string | undefined,
   },
   {
     slug: "villa-piscine",
@@ -173,6 +177,8 @@ export const REALISATIONS_EN = [
     gallery: undefined as string[] | undefined,
     video: undefined as string | undefined,
     videoUrl: undefined as string | undefined,
+    beforeImg: undefined as string | undefined,
+    afterImg: undefined as string | undefined,
   },
   {
     slug: "chantier-genie-civil",
@@ -182,6 +188,8 @@ export const REALISATIONS_EN = [
     gallery: undefined as string[] | undefined,
     video: undefined as string | undefined,
     videoUrl: undefined as string | undefined,
+    beforeImg: undefined as string | undefined,
+    afterImg: undefined as string | undefined,
   },
 ] as const;
 

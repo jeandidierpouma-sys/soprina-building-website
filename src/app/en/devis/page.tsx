@@ -7,8 +7,9 @@ import { SectorsStrip } from "@/components/sections/sectors-strip";
 import { MethodPreview } from "@/components/sections/method-preview";
 import { WhyUs } from "@/components/sections/why-us";
 import { Faq } from "@/components/sections/faq";
-import { ContactForm } from "@/components/forms/contact-form";
+import { DevisFlow } from "@/components/forms/devis-flow";
 import { CONTACT } from "@/lib/content";
+import { DOMAINS_EN } from "@/lib/content.en";
 import { pageMetadata } from "@/lib/seo";
 import { Reveal } from "@/components/motion/reveal";
 
@@ -79,12 +80,11 @@ export default function DevisPageEn() {
             </div>
           </Reveal>
 
-          <Reveal
-            direction="right"
-            delay={0.1}
-            className="rounded-2xl border border-sb-grayline bg-muted p-6 sm:p-8"
-          >
-            <ContactForm locale="en" />
+          <Reveal direction="right" delay={0.1}>
+            <DevisFlow
+              locale="en"
+              domains={DOMAINS_EN.map((d) => ({ slug: d.n, title: d.title }))}
+            />
           </Reveal>
         </div>
       </section>

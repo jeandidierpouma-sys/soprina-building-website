@@ -14,6 +14,17 @@ export function SectorsStrip({ locale = "fr" }: { locale?: "fr" | "en" }) {
   const sectors = locale === "en" ? SECTORS_EN : SECTORS;
   const t = TEXT[locale];
 
+  // Rangées fixes (5 + 4) plutôt qu'un flex-wrap laissé libre : avec 9
+  // secteurs, un flex-wrap simple retombait à la largeur du conteneur (8
+  // tags sur la 1ère ligne, le 9e seul et recentré sur la 2e, déséquilibré
+  // visuellement — signalé par DESH). Découpage choisi par regroupement
+  // logique : secteurs privés/commerciaux sur la 1ère ligne, secteurs
+  // publics/institutionnels sur la 2e. Chaque rangée reste elle-même en
+  // flex-wrap + justify-center, donc le rendu reste correct sur mobile si
+  // une rangée doit encore se replier.
+  const row1 = sectors.slice(0, 5);
+  const row2 = sectors.slice(5);
+
   return (
     <section className="bg-sb-navy py-20">
       <div className="container-sb">
@@ -23,13 +34,21 @@ export function SectorsStrip({ locale = "fr" }: { locale?: "fr" | "en" }) {
           </h2>
         </Reveal>
 
-        <div className="flex flex-wrap justify-center gap-3">
-          {sectors.map((s, i) => (
-            <Reveal key={s.name} delay={Math.min(i * 0.05, 0.3)} amount={0.4}>
-              <span className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-white/85 transition-colors hover:border-sb-gold/50 hover:text-sb-gold">
-                {s.name}
-              </span>
-            </Reveal>
+        <div className="flex flex-col items-center gap-3">
+          {[row1, row2].map((row, rowIndex) => (
+            <div key={rowIndex} className="flex flex-wrap justify-center gap-3">
+              {row.map((s, i) => (
+                <Reveal
+                  key={s.name}
+                  delay={Math.min((rowIndex * row1.length + i) * 0.05, 0.3)}
+                  amount={0.4}
+                >
+                  <span className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-white/85 transition-colors hover:border-sb-gold/50 hover:text-sb-gold">
+                    {s.name}
+                  </span>
+                </Reveal>
+              ))}
+            </div>
           ))}
         </div>
 

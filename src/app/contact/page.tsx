@@ -7,6 +7,18 @@ import { CONTACT } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 import { WhatsappIcon } from "@/components/site/social-icons";
 import { Reveal } from "@/components/motion/reveal";
+import { ServiceAreaMap, type ServiceZone } from "@/components/sections/service-area-map";
+
+// Une seule zone confirmée à ce jour (voir la note dans service-area-map.tsx) :
+// le siège, Douala – Bonanjo. Liste à compléter par DESH, jamais à deviner.
+const SERVICE_ZONES: ServiceZone[] = [
+  {
+    name: "Douala – Bonanjo (siège)",
+    detail:
+      "Notre siège est situé à Bonanjo, près de Kenya Airways. C'est notre zone d'intervention la plus directe.",
+    confirmed: true,
+  },
+];
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact — SOPRINA BUILDING",
@@ -106,6 +118,10 @@ export default function ContactPage() {
                 className="h-full w-full"
                 loading="lazy"
               />
+            </div>
+
+            <div className="mt-6">
+              <ServiceAreaMap locale="fr" zones={SERVICE_ZONES} />
             </div>
           </Reveal>
 

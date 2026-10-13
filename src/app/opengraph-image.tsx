@@ -23,12 +23,18 @@ const poppinsSemibold = readFileSync(
   )
 );
 
-// Logo réel (fourni par le client le 2026-10-11) encodé en data URI —
-// remplace le losange dessiné à la main utilisé ici auparavant (faute
-// d'un fichier logo exploitable à l'époque : le seul PNG disponible avait
-// du texte et un fond non détourables, voir git blame). ImageResponse ne
-// peut pas charger une URL externe de façon fiable, donc on lit le
-// fichier au build comme pour les polices ci-dessus.
+// Logo réel (fourni par le client) encodé en data URI — remplace le losange
+// dessiné à la main utilisé ici auparavant (faute d'un fichier logo
+// exploitable à l'époque : le seul PNG disponible avait du texte et un fond
+// non détourables, voir git blame). ImageResponse ne peut pas charger une
+// URL externe de façon fiable, donc on lit le fichier au build comme pour
+// les polices ci-dessus.
+//
+// Mise à jour 2026-10-13 : nouveau fichier source officiel (logo mis à jour
+// par le client, incluant un détail flèche supplémentaire dans le chevron).
+// Son ratio réel est 293:324 (≈0,904), différent de l'ancien mark (134:156,
+// ≈0,859) — la largeur ci-dessous (46 au lieu de 44) est recalculée pour ce
+// nouveau ratio à hauteur égale (51), afin de ne pas déformer l'image.
 const logoMarkBase64 = readFileSync(
   join(process.cwd(), "public/images/brand/logo-mark.png")
 ).toString("base64");
@@ -52,7 +58,7 @@ export default function OpengraphImage() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse (Satori) requires a plain <img>, not next/image */}
-          <img src={logoMarkSrc} width={44} height={51} alt="" />
+          <img src={logoMarkSrc} width={46} height={51} alt="" />
           <div
             style={{
               display: "flex",

@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 
+import { BeforeAfterSlider } from "@/components/sections/before-after-slider";
+
 // Média(s) d'une carte "Réalisation" : un ou plusieurs éléments (photo
 // principale, photos de galerie, clip auto-hébergé ou vidéo YouTube),
 // affichés dans une bande défilante horizontalement (swipe tactile sur
@@ -21,18 +23,29 @@ import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 export type MediaItem =
   | { kind: "image"; src: string }
   | { kind: "video"; src: string }
-  | { kind: "youtube"; id: string };
+  | { kind: "youtube"; id: string }
+  | { kind: "compare"; before: string; after: string };
 
-// Construit la liste ordonnée des médias d'un projet : photo principale,
-// puis photos de galerie éventuelles, puis vidéo éventuelle (fichier ou
+// Construit la liste ordonnée des médias d'un projet : comparaison
+// avant/après éventuelle (voir before-after-slider.tsx — ajoutée en
+// premier, uniquement si les DEUX champs beforeImg/afterImg sont fournis ;
+// statut MISSING en données tant que DESH n'a pas transmis de paires
+// avant/après avec consentement client), puis photo principale, puis
+// photos de galerie éventuelles, puis vidéo éventuelle (fichier ou
 // YouTube — un seul des deux sur un même projet) en dernier.
 export function buildMediaItems(p: {
   img: string;
   gallery?: readonly string[];
   video?: string;
   videoUrl?: string;
+  beforeImg?: string;
+  afterImg?: string;
 }): MediaItem[] {
-  const items: MediaItem[] = [{ kind: "image", src: p.img }];
+  const items: MediaItem[] = [];
+  if (p.beforeImg && p.afterImg) {
+    items.push({ kind: "compare", before: p.beforeImg, after: p.afterImg });
+  }
+  items.push({ kind: "image", src: p.img });
   if (p.gallery) {
     for (const src of p.gallery) items.push({ kind: "image", src });
   }
@@ -51,6 +64,12 @@ function MediaItemView({
   poster: string;
 }) {
   const [youtubeActivated, setYoutubeActivated] = useState(false);
+
+  if (item.kind === "compare") {
+    return (
+      <BeforeAfterSlider before={item.before} after={item.after} alt={alt} />
+    );
+  }
 
   if (item.kind === "video") {
     return (
@@ -122,14 +141,18 @@ export function RealisationMedia({
   gallery,
   video,
   videoUrl,
+  beforeImg,
+  afterImg,
 }: {
   img: string;
   alt: string;
   gallery?: readonly string[];
   video?: string;
   videoUrl?: string;
+  beforeImg?: string;
+  afterImg?: string;
 }) {
-  const items = buildMediaItems({ img, gallery, video, videoUrl });
+  const items = buildMediaItems({ img, gallery, video, videoUrl, beforeImg, afterImg });
   const scrollerRef = useRef<HTMLDivElement>(null);
   const hasMultiple = items.length > 1;
 

@@ -55,6 +55,13 @@ export const REALISATIONS = [
     gallery: undefined as string[] | undefined,
     video: undefined as string | undefined,
     videoUrl: undefined as string | undefined,
+    // Slider avant/après (ajouté le 2026-10-12, MISSING tant qu'aucune
+    // paire n'est fournie) : les deux champs doivent être renseignés
+    // ensemble pour que le slider s'affiche (voir before-after-slider.tsx).
+    // Nécessite l'accord du client avant toute publication de photos
+    // "avant travaux" d'un chantier.
+    beforeImg: undefined as string | undefined,
+    afterImg: undefined as string | undefined,
   },
   {
     slug: "amenagement-cuisine",
@@ -64,6 +71,13 @@ export const REALISATIONS = [
     gallery: undefined as string[] | undefined,
     video: undefined as string | undefined,
     videoUrl: undefined as string | undefined,
+    // Slider avant/après (ajouté le 2026-10-12, MISSING tant qu'aucune
+    // paire n'est fournie) : les deux champs doivent être renseignés
+    // ensemble pour que le slider s'affiche (voir before-after-slider.tsx).
+    // Nécessite l'accord du client avant toute publication de photos
+    // "avant travaux" d'un chantier.
+    beforeImg: undefined as string | undefined,
+    afterImg: undefined as string | undefined,
   },
   {
     slug: "villa-piscine",
@@ -73,6 +87,13 @@ export const REALISATIONS = [
     gallery: undefined as string[] | undefined,
     video: undefined as string | undefined,
     videoUrl: undefined as string | undefined,
+    // Slider avant/après (ajouté le 2026-10-12, MISSING tant qu'aucune
+    // paire n'est fournie) : les deux champs doivent être renseignés
+    // ensemble pour que le slider s'affiche (voir before-after-slider.tsx).
+    // Nécessite l'accord du client avant toute publication de photos
+    // "avant travaux" d'un chantier.
+    beforeImg: undefined as string | undefined,
+    afterImg: undefined as string | undefined,
   },
   {
     slug: "chantier-genie-civil",
@@ -82,6 +103,13 @@ export const REALISATIONS = [
     gallery: undefined as string[] | undefined,
     video: undefined as string | undefined,
     videoUrl: undefined as string | undefined,
+    // Slider avant/après (ajouté le 2026-10-12, MISSING tant qu'aucune
+    // paire n'est fournie) : les deux champs doivent être renseignés
+    // ensemble pour que le slider s'affiche (voir before-after-slider.tsx).
+    // Nécessite l'accord du client avant toute publication de photos
+    // "avant travaux" d'un chantier.
+    beforeImg: undefined as string | undefined,
+    afterImg: undefined as string | undefined,
   },
 ] as const;
 

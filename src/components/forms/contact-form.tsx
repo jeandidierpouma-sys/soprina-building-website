@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Loader2, Send, CheckCircle2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,12 @@ type FormState = {
   phone: string;
   subject: string;
   message: string;
+  // Honeypot anti-spam : champ invisible pour un humain (hors écran,
+  // aria-hidden, jamais de display:none — certains bots l'ignorent), mais
+  // rempli par les robots qui remplissent tous les champs d'un formulaire.
+  // Nom volontairement plausible ("website") pour attirer le remplissage
+  // automatique. Voir /api/contact pour la vérification côté serveur.
+  website: string;
 };
 
 const EMPTY: FormState = {
@@ -23,6 +29,7 @@ const EMPTY: FormState = {
   phone: "",
   subject: "",
   message: "",
+  website: "",
 };
 
 const TEXT = {
@@ -109,12 +116,32 @@ const TEXT = {
 // donc le filet de sécurité, jamais un chemin mort. `locale` ne change que
 // les textes affichés/validation/mailto ; le comportement d'envoi (API →
 // fallback mailto) est strictement identique dans les deux langues.
-export function ContactForm({ locale = "fr" }: { locale?: "fr" | "en" }) {
+export function ContactForm({
+  locale = "fr",
+  initialSubject,
+  initialMessage,
+}: {
+  locale?: "fr" | "en";
+  // Pré-remplissage optionnel (ajouté le 2026-10-12 pour le calculateur de
+  // devis, voir devis-flow.tsx). Purement cosmétique : ne change rien au
+  // comportement d'envoi ni à la validation. Un appel existant sans ces
+  // props (ex. /contact) garde exactement le même comportement qu'avant.
+  initialSubject?: string;
+  initialMessage?: string;
+}) {
   const t = TEXT[locale];
-  const [values, setValues] = useState<FormState>(EMPTY);
+  const [values, setValues] = useState<FormState>(() => ({
+    ...EMPTY,
+    subject: initialSubject ?? EMPTY.subject,
+    message: initialMessage ?? EMPTY.message,
+  }));
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [sentVia, setSentVia] = useState<"api" | "mailto">("mailto");
+  // Piège temporel anti-spam : l'instant où le formulaire apparaît à
+  // l'écran. Un robot soumet en quelques millisecondes ; un humain met au
+  // minimum 1,5s à lire puis remplir. Calculé une seule fois par montage.
+  const renderedAt = useRef(Date.now());
 
   function validate(v: FormState) {
     const next: Partial<FormState> = {};
@@ -151,7 +178,7 @@ export function ContactForm({ locale = "fr" }: { locale?: "fr" | "en" }) {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, startedAt: renderedAt.current }),
       });
 
       if (!res.ok) throw new Error("api-error");
@@ -196,6 +223,27 @@ export function ContactForm({ locale = "fr" }: { locale?: "fr" | "en" }) {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+      {/* Honeypot anti-spam : invisible et inatteignable pour un visiteur
+          humain (hors écran, pas dans l'ordre de tabulation, masqué aux
+          lecteurs d'écran), mais présent dans le DOM pour les robots qui
+          remplissent tous les champs automatiquement. Ne jamais mettre
+          display:none : certains robots l'ignorent justement pour ça. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-[9999px] top-0 size-px overflow-hidden opacity-0"
+      >
+        <label htmlFor="website">Ne pas remplir ce champ</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={values.website}
+          onChange={(e) => update("website", e.target.value)}
+        />
+      </div>
+
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <Label htmlFor="name">{t.nameLabel}</Label>

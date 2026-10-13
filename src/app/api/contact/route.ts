@@ -27,13 +27,72 @@ type ContactPayload = {
   phone?: string;
   subject?: string;
   message?: string;
+  // Anti-spam : champ honeypot (doit rester vide) + horodatage côté client
+  // (date de rendu du formulaire). Voir src/components/forms/contact-form.tsx.
+  website?: string;
+  startedAt?: number;
 };
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+// Anti-spam — statut : IMPLEMENTED / TESTED (corrige l'absence totale de
+// protection constatée à l'audit du 2026-10-12 : ni honeypot, ni
+// limite de fréquence, ni captcha sur /contact et /devis, qui réutilisent
+// tous deux ce même composant et cette même route).
+//
+// Trois couches, par ordre croissant de coût/complexité :
+// 1. Honeypot — champ "website" qui doit rester vide. Un robot qui
+//    remplit tous les champs du DOM se fait piéger.
+// 2. Piège temporel — rejette toute soumission envoyée moins de 1,5s après
+//    l'affichage du formulaire (un humain ne remplit jamais aussi vite).
+// 3. Limite de fréquence par IP — 5 soumissions / 10 min. Implémentation
+//    en mémoire (Map), donc "au mieux" : elle ne survit pas à un redémarrage
+//    de l'instance serverless et n'est pas partagée entre plusieurs
+//    instances simultanées. Suffisant pour dissuader un script basique à ce
+//    volume de trafic ; pour une garantie stricte multi-instance, il
+//    faudrait un store partagé (ex. Upstash Redis, offre gratuite) — non
+//    fait ici pour ne pas ajouter une dépendance externe sans décision
+//    explicite du client.
+//
+// Les couches 1 et 2 renvoient un faux succès (200, ok:true) SANS envoyer
+// l'e-mail : un robot qui reçoit une erreur ajuste son comportement, un
+// robot qui "réussit" silencieusement abandonne plus vite. La couche 3
+// renvoie une vraie erreur 429 : un utilisateur légitime peut la
+// rencontrer (double-clic, retour arrière) et doit être informé.
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX = 5;
+const MIN_SUBMIT_MS = 1500;
+
+const submissionsByIp = new Map<string, number[]>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const recent = (submissionsByIp.get(ip) ?? []).filter(
+    (t) => now - t < RATE_LIMIT_WINDOW_MS
+  );
+  recent.push(now);
+  submissionsByIp.set(ip, recent);
+  return recent.length > RATE_LIMIT_MAX;
+}
+
 export async function POST(request: Request) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "Trop de demandes envoyées. Réessayez dans quelques minutes.",
+      },
+      { status: 429 }
+    );
+  }
+
   let body: ContactPayload;
   try {
     body = await request.json();
@@ -49,12 +108,28 @@ export async function POST(request: Request) {
   const phone = (body.phone ?? "").trim();
   const subject = (body.subject ?? "").trim();
   const message = (body.message ?? "").trim();
+  const website = (body.website ?? "").trim();
+  const startedAt = body.startedAt;
 
   if (!name || !email || !message || !isValidEmail(email)) {
     return NextResponse.json(
       { ok: false, error: "Champs requis manquants ou invalides." },
       { status: 400 }
     );
+  }
+
+  const elapsed = typeof startedAt === "number" ? Date.now() - startedAt : null;
+  const looksLikeBot =
+    website.length > 0 || (elapsed !== null && elapsed < MIN_SUBMIT_MS);
+
+  if (looksLikeBot) {
+    console.warn("Contact route: submission blocked (anti-spam)", {
+      ip,
+      honeypotFilled: website.length > 0,
+      elapsedMs: elapsed,
+    });
+    // Faux succès délibéré — voir note anti-spam ci-dessus.
+    return NextResponse.json({ ok: true });
   }
 
   const apiKey = process.env.RESEND_API_KEY;

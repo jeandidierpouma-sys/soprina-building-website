@@ -139,9 +139,23 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Lien d'évitement (WCAG 2.1 — 2.4.1 Bypass Blocks, absent avant
+            l'audit accessibilité du 2026-10-12) : invisible jusqu'au focus
+            clavier (premier Tab), permet de sauter directement le header
+            (nav + sélecteur de langue + téléphone) pour atteindre le
+            contenu principal. Indispensable pour la navigation clavier et
+            les utilisateurs de lecteur d'écran, répétée sur chaque page. */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-sb-navy focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-2 focus:outline-offset-2 focus:outline-sb-gold"
+        >
+          {locale === "fr" ? "Aller au contenu principal" : "Skip to main content"}
+        </a>
         <MotionProvider>
           <SiteHeader locale={locale} />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
           <SiteFooter locale={locale} />
           <WhatsappWidget />
         </MotionProvider>
