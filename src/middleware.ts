@@ -31,15 +31,22 @@ import type { NextRequest } from "next/server";
 //    public est en travaux — ce sont deux préoccupations séparées.
 //  - /maintenance et /en/maintenance : jamais re-basculés sur eux-mêmes.
 //  - Bypass preview : ?preview=<MAINTENANCE_BYPASS_TOKEN> (variable
-//    d'environnement serveur distincte) pose un cookie httpOnly sb_bypass
+//    d'environnement serveur distincte) pose un cookie httpOnly sb_bypass_v2
 //    valable 7 jours, qui laisse passer le vrai site pour ce visiteur —
 //    permet à DESH/l'équipe de vérifier l'avancement sans désactiver la
 //    maintenance pour le public. Sans MAINTENANCE_BYPASS_TOKEN défini, ce
 //    bypass est désactivé (aucune valeur de ?preview= ne peut matcher
 //    undefined).
+//  - Nom du cookie passé à "sb_bypass_v2" le 2026-10-16 (incident) : des
+//    navigateurs ayant déjà ouvert un lien ?preview=... avant l'activation
+//    réelle de MAINTENANCE_MODE gardaient l'ancien cookie "sb_bypass" et
+//    continuaient à voir le vrai site alors que DESH voulait zéro
+//    exception. Renommer le cookie invalide d'un coup tous les anciens
+//    cookies déjà posés, sur n'importe quel navigateur — sans action
+//    requise côté visiteur.
 // Statut : IMPLEMENTED, TESTED — voir claude/decisions-validees.md.
 const MAINTENANCE_MODE = process.env.MAINTENANCE_MODE === "true";
-const BYPASS_COOKIE = "sb_bypass";
+const BYPASS_COOKIE = "sb_bypass_v2";
 
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
