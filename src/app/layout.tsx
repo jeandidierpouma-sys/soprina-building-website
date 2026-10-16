@@ -121,10 +121,26 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   // footer ni widget WhatsApp commercial — le Studio a besoin de tout le
   // viewport. Voir middleware.ts pour la pose du header x-is-studio.
   const isStudio = headerList.get("x-is-studio") === "1";
+  // Page "en travaux" (ajoutée le 2026-10-16, voir middleware.ts) : même
+  // coquille minimale que /studio (pas de header/footer/widget WhatsApp)
+  // pour éviter qu'un visiteur puisse naviguer vers une autre page du site
+  // pendant les travaux — contrairement à /studio, la langue compte ici
+  // (page fr ou en selon x-locale), donc pas de lang="fr" figé.
+  const isMaintenance = headerList.get("x-is-maintenance") === "1";
 
   if (isStudio) {
     return (
       <html lang="fr" className="h-full antialiased">
+        <body className="min-h-full bg-background text-foreground">
+          {children}
+        </body>
+      </html>
+    );
+  }
+
+  if (isMaintenance) {
+    return (
+      <html lang={locale} className="h-full antialiased">
         <body className="min-h-full bg-background text-foreground">
           {children}
         </body>
